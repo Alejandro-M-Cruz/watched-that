@@ -1,23 +1,35 @@
 package com.example.watchedthat.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
+import com.example.watchedthat.Constants
 
-@Entity(tableName = "visual_media", primaryKeys = ["id", "mediaType"])
-class VisualMedia(
-    val id: Int,
-    val title: String,
-    val genres: List<Genre>,
-    val rating: Float,
-    @ColumnInfo(name = "rating_count")
-    val ratingCount: Int,
-    @ColumnInfo(name = "release_date")
-    val releaseDate: String,
-    val popularity: Float,
-    @ColumnInfo(name = "poster_path")
-    val posterPath: String? = null,
-    @ColumnInfo(name = "backdrop_path")
-    val backdropPath: String? = null,
-    @ColumnInfo(name = "media_type")
+interface VisualMedia {
+    val id: Int
+    val title: String
+    val releaseDate: String
+    val genreIds: List<Int>
+    val rating: Float
+    val ratingCount: Int
+    val popularity: Float
+    val posterPath: String?
+    val backdropPath: String?
     val mediaType: MediaType
-)
+
+    val posterUrl: String?
+        get() = posterUrl?.let { "${Constants.BaseImageUrl}/$it" }
+
+    val backdropUrl: String?
+        get() = backdropUrl?.let { "${Constants.BaseImageUrl}/$it" }
+
+    fun toSavedVisualMedia() = SavedVisualMedia(
+        id = id,
+        title = title,
+        genreIds = genreIds,
+        rating = rating,
+        ratingCount = ratingCount,
+        releaseDate = releaseDate,
+        popularity = popularity,
+        posterPath = posterPath,
+        backdropPath = backdropPath,
+        mediaType = mediaType
+    )
+}

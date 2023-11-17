@@ -1,5 +1,6 @@
 package com.example.watchedthat.model
 
+import com.example.watchedthat.network.VideosResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,12 +24,11 @@ class MovieDetails(
     val budget: Int,
     val revenue: Int,
     val runtime: Int,
-    @SerialName("video")
-    val hasVideo: Boolean,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("backdrop_path")
     val backdropPath: String? = null,
     @SerialName("homepage")
     val website: String? = null,
+    val videos: VideosResponse = VideosResponse(emptyList())
 )
