@@ -1,12 +1,12 @@
-package com.example.watchedthat.model
+package com.example.watchedthat.unused
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.watchedthat.model.VisualMedia
 
-@Entity(tableName = "visual_media")
+@Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"])
 data class SavedVisualMedia(
-    @PrimaryKey
     override val id: Int,
     override val title: String,
     @ColumnInfo(name = "genre_ids")

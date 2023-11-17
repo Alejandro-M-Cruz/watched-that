@@ -1,6 +1,8 @@
 package com.example.watchedthat.model
 
 import com.example.watchedthat.Constants
+import com.example.watchedthat.unused.MediaType
+import com.example.watchedthat.unused.SavedVisualMedia
 
 interface VisualMedia {
     val id: Int

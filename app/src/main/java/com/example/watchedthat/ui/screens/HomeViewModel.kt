@@ -11,11 +11,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.VisualMediaRepository
-import com.example.watchedthat.model.SavedVisualMedia
+import com.example.watchedthat.model.VisualMedia
 import kotlinx.coroutines.launch
 
 sealed interface MovieDiscoveryState {
-    data class Success(val savedVisualMedia: List<SavedVisualMedia>) : MovieDiscoveryState
+    data class Success(val savedVisualMedia: List<VisualMedia>) : MovieDiscoveryState
     object Loading : MovieDiscoveryState
     object Error : MovieDiscoveryState
 }

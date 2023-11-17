@@ -1,6 +1,5 @@
-package com.example.watchedthat.model
+package com.example.watchedthat.unused
 
-import com.example.watchedthat.network.VideosResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

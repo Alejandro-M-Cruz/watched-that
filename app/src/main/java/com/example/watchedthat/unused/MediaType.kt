@@ -1,4 +1,4 @@
-package com.example.watchedthat.model
+package com.example.watchedthat.unused
 
 enum class MediaType(val value: String) {
     MOVIE("movie"),

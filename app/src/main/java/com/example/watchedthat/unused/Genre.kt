@@ -1,4 +1,4 @@
-package com.example.watchedthat.model
+package com.example.watchedthat.unused
 
 import androidx.room.Entity
 import kotlinx.serialization.Serializable

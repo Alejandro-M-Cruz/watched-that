@@ -1,8 +1,10 @@
 package com.example.watchedthat.data
 
+import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.Constants
 import com.example.watchedthat.network.MoviesApiService
 import com.example.watchedthat.network.TvShowsApiService
+import com.example.watchedthat.network.VisualMediaApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -37,7 +39,11 @@ class DefaultAppContainer : AppContainer {
         retrofit.create(TvShowsApiService::class.java)
     }
 
+    private val visualMediaApiService: VisualMediaApiService by lazy {
+        retrofit.create(VisualMediaApiService::class.java)
+    }
+
     override val visualMediaRepository: VisualMediaRepository by lazy {
-        NetworkVisualMediaRepository(moviesApiService, tvShowsApiService)
+        NetworkVisualMediaRepository(moviesApiService, tvShowsApiService, visualMediaApiService)
     }
 }
