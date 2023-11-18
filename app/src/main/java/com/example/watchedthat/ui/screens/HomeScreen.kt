@@ -1,5 +1,6 @@
 package com.example.watchedthat.ui.screens
 
+import android.content.Intent
 import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,6 +43,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +51,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
+import androidx.core.content.ContextCompat.startActivity
 
 /*--------------------ORIGINAL-----------------
 @Composable
@@ -69,8 +72,7 @@ fun HomeScreenPreview() {
 }
 
 
-//-------------
-/*Not used
+/*Not used yet
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -136,7 +138,7 @@ fun GreetingText(message: String, modifier: Modifier = Modifier) {
 
             Button(onClick = {
 
-                // Go to VisualMediaList
+                // --------------Go to VisualMediaList
 
             }) {
                 Text("Go")
