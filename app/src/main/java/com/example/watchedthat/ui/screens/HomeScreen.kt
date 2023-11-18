@@ -70,6 +70,7 @@ fun HomeScreenPreview() {
 
 
 //-------------
+/*Not used
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -98,18 +99,12 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               /* Text(
-                    text = "Content of the page",
-                    fontSize = 30.sp,
-                    color = Color.Black
-                )*/
-               // GreetingText(message = "Go to MovieList", from = "")
                 DisplayImages()
             }
         })
 
 }
-
+*/
 @Composable
 fun GreetingImage(){
     Image(
@@ -146,18 +141,6 @@ fun GreetingText(message: String, modifier: Modifier = Modifier) {
             }) {
                 Text("Go")
             }
-
-
-
-     /*       button.setOnClickListener{
-            try{
-                val uri = Uri.parse("https://stackoverflow.com/")
-                val intent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intent)
-            }
-            catch(e : ActivityNotFoundException){
-            }
-        } */
     }
 }
 
