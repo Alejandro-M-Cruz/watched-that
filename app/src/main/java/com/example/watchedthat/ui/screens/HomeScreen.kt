@@ -47,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 
 /*--------------------ORIGINAL-----------------
 @Composable
@@ -62,7 +64,7 @@ fun HomeScreenOLD(
 @Composable
 fun HomeScreenPreview() {
     DisplayImages()
-    GreetingText(message = "Go to Film", from ="Click" )
+    GreetingText(message = "WatchedThat")
     //HomeScreen(movieDiscoveryState = MovieDiscoveryState.Loading, retryAction = {})
 }
 
@@ -122,7 +124,7 @@ fun GreetingImage(){
 
 
 @Composable
-fun GreetingText(message: String, from: String, modifier: Modifier = Modifier) {
+fun GreetingText(message: String, modifier: Modifier = Modifier) {
     Column ( verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -136,12 +138,26 @@ fun GreetingText(message: String, from: String, modifier: Modifier = Modifier) {
             fontSize = 50.sp,
             modifier = Modifier
         )
-        Text(
-            text = from,
-            fontSize = 16.sp,
-            modifier = Modifier
-                .padding(16.dp)
-        )
+
+            Button(onClick = {
+
+                // Go to VisualMediaList
+
+            }) {
+                Text("Go")
+            }
+
+
+
+     /*       button.setOnClickListener{
+            try{
+                val uri = Uri.parse("https://stackoverflow.com/")
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intent)
+            }
+            catch(e : ActivityNotFoundException){
+            }
+        } */
     }
 }
 
@@ -159,17 +175,10 @@ fun DisplayImages(modifier: Modifier = Modifier){
     )
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
-    ) {
-        GreetingIcon(imageGit, "PAMN Project")
-    }
-    Column(
-        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.Start
     ) {
-        GreetingIcon(imagePhone, "+00 1111222233")
+        GreetingIcon(imageGit, "PAMN Project")
     }
     Column(
         modifier = Modifier.fillMaxSize(),
