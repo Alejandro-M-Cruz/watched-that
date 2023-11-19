@@ -16,15 +16,19 @@ interface AppContainer {
 }
 
 class DefaultAppContainer : AppContainer {
+    private val jsonFormat = Json {
+        ignoreUnknownKeys = true
+    }
+
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BaseApiUrl)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(jsonFormat.asConverterFactory("application/json".toMediaType()))
         .client(
             OkHttpClient.Builder().addInterceptor {
                 val request = it.request()
                 val headersWithAuth = request.headers
                     .newBuilder()
-                    .add("Authorization", "Bearer ${BuildConfig.TMDB_API_KEY}")
+                    .add("Authorization", "Bearer ${BuildConfig.TMDB_API_TOKEN}")
                     .build()
                 it.proceed(request.newBuilder().headers(headersWithAuth).build())
             }.build()

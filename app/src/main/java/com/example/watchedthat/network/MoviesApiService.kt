@@ -2,16 +2,13 @@ package com.example.watchedthat.network
 
 import com.example.watchedthat.model.Movie
 import com.example.watchedthat.unused.GenresResponse
-import com.example.watchedthat.unused.MovieDetails
 import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface MoviesApiService {
-    @GET("/discover/movie?include_adult=false")
-    suspend fun getTrendingMovies(): PagedResponse<Movie>
+    @GET("discover/movie?include_adult=false")
+    suspend fun getTrendingMovies(): VisualMediaPagedResponse
 
-    @GET("/genre/movie/list")
+    @GET("genre/movie/list")
     suspend fun getAllMovieGenres(): GenresResponse
 
     /*@GET("/movie/{id}?append_to_response=videos")

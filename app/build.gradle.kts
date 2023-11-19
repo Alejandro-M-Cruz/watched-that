@@ -23,8 +23,8 @@ android {
             useSupportLibrary = true
         }
 
-        val tmdbApiKey = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
-        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
+        val tmdbApiToken = gradleLocalProperties(rootDir).getProperty("TMDB_API_TOKEN")
+        buildConfigField("String", "TMDB_API_TOKEN", "\"$tmdbApiToken\"")
     }
 
     buildTypes {

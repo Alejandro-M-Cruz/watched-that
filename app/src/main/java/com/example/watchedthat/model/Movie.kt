@@ -1,6 +1,5 @@
 package com.example.watchedthat.model
 
-import com.example.watchedthat.unused.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
