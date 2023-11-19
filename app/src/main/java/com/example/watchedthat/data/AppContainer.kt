@@ -1,7 +1,10 @@
 package com.example.watchedthat.data
 
+import android.content.Context
 import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.Constants
+import com.example.watchedthat.WatchedThatApplication
+import com.example.watchedthat.db.AppDatabase
 import com.example.watchedthat.network.MoviesApiService
 import com.example.watchedthat.network.TvShowsApiService
 import com.example.watchedthat.network.VisualMediaApiService
@@ -13,9 +16,10 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val visualMediaRepository: VisualMediaRepository
+    val savedVisualMediaRepository: SavedVisualMediaRepository
 }
 
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(private val context: Context) : AppContainer {
     private val jsonFormat = Json {
         ignoreUnknownKeys = true
     }
@@ -49,5 +53,9 @@ class DefaultAppContainer : AppContainer {
 
     override val visualMediaRepository: VisualMediaRepository by lazy {
         NetworkVisualMediaRepository(moviesApiService, tvShowsApiService, visualMediaApiService)
+    }
+
+    override val savedVisualMediaRepository: SavedVisualMediaRepository by lazy {
+        OfflineSavedVisualMediaRepository(AppDatabase.getInstance(context).savedVisualMediaDao())
     }
 }

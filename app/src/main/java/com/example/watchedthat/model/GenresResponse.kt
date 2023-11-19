@@ -1,5 +1,6 @@
-package com.example.watchedthat.unused
+package com.example.watchedthat.model
 
+import com.example.watchedthat.model.Genre
 import kotlinx.serialization.Serializable
 
 @Serializable

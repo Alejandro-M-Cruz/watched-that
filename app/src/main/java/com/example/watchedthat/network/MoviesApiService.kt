@@ -1,7 +1,6 @@
 package com.example.watchedthat.network
 
-import com.example.watchedthat.model.Movie
-import com.example.watchedthat.unused.GenresResponse
+import com.example.watchedthat.model.GenresResponse
 import retrofit2.http.GET
 
 interface MoviesApiService {

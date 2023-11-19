@@ -2,7 +2,7 @@ package com.example.watchedthat.fake
 
 import com.example.watchedthat.model.Movie
 import com.example.watchedthat.model.TvShow
-import com.example.watchedthat.unused.Genre
+import com.example.watchedthat.model.Genre
 
 object FakeDataSource {
     val genre1 = Genre(id = 1, name = "Genre1")

@@ -2,7 +2,6 @@ package com.example.watchedthat.model
 
 import com.example.watchedthat.Constants
 import com.example.watchedthat.network.VisualMediaSerializer
-import com.example.watchedthat.unused.SavedVisualMedia
 import kotlinx.serialization.Serializable
 
 @Serializable(with = VisualMediaSerializer::class)

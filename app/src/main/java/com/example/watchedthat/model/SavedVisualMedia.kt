@@ -1,17 +1,21 @@
-package com.example.watchedthat.unused
+package com.example.watchedthat.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.example.watchedthat.model.MediaType
-import com.example.watchedthat.model.VisualMedia
+import androidx.room.Ignore
+import androidx.room.Index
 
-@Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"])
+@Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"], indices = [
+    Index(value = ["title"]),
+    Index(value = ["added_to_wishlist_at"]),
+    Index(value = ["watched_at"])
+])
 data class SavedVisualMedia(
     override val id: Int,
     override val title: String,
-    @ColumnInfo(name = "genre_ids")
-    override val genreIds: List<Int>,
     override val rating: Float,
+    @Ignore
+    override val genreIds: List<Int>,
     @ColumnInfo(name = "rating_count")
     override val ratingCount: Int,
     @ColumnInfo(name = "release_date")

@@ -1,9 +1,8 @@
 package com.example.watchedthat.fake
 
-import com.example.watchedthat.model.TvShow
 import com.example.watchedthat.network.VisualMediaPagedResponse
 import com.example.watchedthat.network.TvShowsApiService
-import com.example.watchedthat.unused.GenresResponse
+import com.example.watchedthat.model.GenresResponse
 
 class FakeTvShowsApiService : TvShowsApiService {
     override suspend fun getTrendingTvShows(): VisualMediaPagedResponse {
