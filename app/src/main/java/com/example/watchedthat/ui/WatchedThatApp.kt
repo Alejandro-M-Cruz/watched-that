@@ -10,5 +10,5 @@ import com.example.watchedthat.ui.screens.HomeViewModel
 fun WatchedThatApp() {
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
 
-    HomeScreen(homeViewModel.movieDiscoveryState, homeViewModel::discoverMovies)
+   HomeScreen(homeViewModel.movieDiscoveryState, homeViewModel::discoverMovies)
 }

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.platform.LocalContext
-
+import com.example.watchedthat.ui.WatchedThatApp
 
 
 class MainActivity : ComponentActivity() {
@@ -36,12 +36,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                WatchedThatApp() //ui/theme/WatchedThatApp.kt -> HomeScreen
                 }
             }
         }
     }
 }
+
+/*------------------------------ORIGINAL------------------------
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
@@ -58,7 +60,7 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
-
+-----------------------------------------------------------------*/
 
 /*-----------------------------Prove--------------------
 @Composable

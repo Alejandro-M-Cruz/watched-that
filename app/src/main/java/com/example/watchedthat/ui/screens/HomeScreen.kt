@@ -55,7 +55,7 @@ import androidx.core.content.ContextCompat.startActivity
 
 /*--------------------ORIGINAL-----------------
 @Composable
-fun HomeScreenOLD(
+fun HomeScreen(
     movieDiscoveryState: MovieDiscoveryState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
@@ -71,42 +71,17 @@ fun HomeScreenPreview() {
     //HomeScreen(movieDiscoveryState = MovieDiscoveryState.Loading, retryAction = {})
 }
 
-
-/*Not used yet
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     movieDiscoveryState: MovieDiscoveryState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "WatchedThat")
-                },
-
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Green,
-                    titleContentColor = Color.Black,
-                ),
-            )
-        }, content = {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
-                    .background(Color.White),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                DisplayImages()
-            }
-        })
-
+    DisplayImages()
+    GreetingText(message = "WatchedThat")
 }
-*/
+
+
 @Composable
 fun GreetingImage(){
     Image(
@@ -149,7 +124,6 @@ fun GreetingText(message: String, modifier: Modifier = Modifier) {
 @Composable
 fun DisplayImages(modifier: Modifier = Modifier){
     val imageGit = painterResource(R.drawable.git_icon)
-    val imagePhone = painterResource(R.drawable.phone_icon)
     val imageMail = painterResource(R.drawable.email_icon)
 
     Image(
