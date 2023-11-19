@@ -26,7 +26,6 @@ interface VisualMedia {
     fun toSavedVisualMedia() = SavedVisualMedia(
         id = id,
         title = title,
-        genreIds = genreIds,
         rating = rating,
         ratingCount = ratingCount,
         releaseDate = releaseDate,
@@ -34,5 +33,5 @@ interface VisualMedia {
         posterPath = posterPath,
         backdropPath = backdropPath,
         mediaType = mediaType
-    )
+    ).also { it.genreIds = genreIds }
 }

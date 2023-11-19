@@ -14,8 +14,6 @@ data class SavedVisualMedia(
     override val id: Int,
     override val title: String,
     override val rating: Float,
-    @Ignore
-    override val genreIds: List<Int>,
     @ColumnInfo(name = "rating_count")
     override val ratingCount: Int,
     @ColumnInfo(name = "release_date")
@@ -30,8 +28,11 @@ data class SavedVisualMedia(
     @ColumnInfo(name = "added_to_wishlist_at")
     var addedToWishlistAt: String? = null,
     @ColumnInfo(name = "media_type")
-    override val mediaType: MediaType
+    override val mediaType: MediaType,
 ) : VisualMedia {
+    @Ignore
+    override var genreIds: List<Int> = emptyList()
+
     val watched: Boolean
         get() = watchedAt != null
 
@@ -55,4 +56,5 @@ data class SavedVisualMedia(
     fun unmarkAsWatched() {
         watchedAt = null
     }
+
 }
