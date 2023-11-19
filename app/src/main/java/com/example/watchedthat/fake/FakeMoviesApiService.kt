@@ -2,12 +2,12 @@ package com.example.watchedthat.fake
 
 import com.example.watchedthat.model.Movie
 import com.example.watchedthat.network.MoviesApiService
-import com.example.watchedthat.network.PagedResponse
+import com.example.watchedthat.network.VisualMediaPagedResponse
 import com.example.watchedthat.unused.GenresResponse
 
 class FakeMoviesApiService : MoviesApiService {
-    override suspend fun getTrendingMovies(): PagedResponse<Movie> {
-        return PagedResponse(
+    override suspend fun getTrendingMovies(): VisualMediaPagedResponse {
+        return VisualMediaPagedResponse(
             page = 1,
             totalPages = 1,
             totalResults = 1,

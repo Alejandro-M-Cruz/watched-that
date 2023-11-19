@@ -2,7 +2,7 @@ package com.example.watchedthat.unused
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.example.watchedthat.model.MediaType
 import com.example.watchedthat.model.VisualMedia
 
 @Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"])

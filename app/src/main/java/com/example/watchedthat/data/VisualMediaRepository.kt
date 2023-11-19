@@ -5,6 +5,7 @@ import com.example.watchedthat.network.MoviesApiService
 import com.example.watchedthat.network.TvShowsApiService
 import com.example.watchedthat.network.VisualMediaApiService
 import com.example.watchedthat.unused.Genre
+import kotlinx.serialization.json.Json
 
 interface VisualMediaRepository {
     suspend fun getTrending(): List<VisualMedia>
