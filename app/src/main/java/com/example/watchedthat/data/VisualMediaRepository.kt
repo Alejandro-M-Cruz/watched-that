@@ -4,12 +4,10 @@ import com.example.watchedthat.model.VisualMedia
 import com.example.watchedthat.network.MoviesApiService
 import com.example.watchedthat.network.TvShowsApiService
 import com.example.watchedthat.network.VisualMediaApiService
-import com.example.watchedthat.model.Genre
 
 interface VisualMediaRepository {
     suspend fun getTrending(): List<VisualMedia>
     suspend fun search(query: String): List<VisualMedia>
-    suspend fun getAllGenres(): List<Genre>
 }
 
 class NetworkVisualMediaRepository(
@@ -25,10 +23,5 @@ class NetworkVisualMediaRepository(
 
     override suspend fun search(query: String): List<VisualMedia> {
         return visualMediaApiService.search(query).results
-    }
-
-    override suspend fun getAllGenres(): List<Genre> {
-        return (moviesApiService.getAllMovieGenres().genres +
-            tvShowsApiService.getAllTvShowGenres().genres).distinct()
     }
 }

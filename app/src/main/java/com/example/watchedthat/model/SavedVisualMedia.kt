@@ -2,7 +2,6 @@ package com.example.watchedthat.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.Index
 
 @Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"], indices = [
@@ -30,9 +29,6 @@ data class SavedVisualMedia(
     @ColumnInfo(name = "media_type")
     override val mediaType: MediaType,
 ) : VisualMedia {
-    @Ignore
-    override var genreIds: List<Int> = emptyList()
-
     val watched: Boolean
         get() = watchedAt != null
 

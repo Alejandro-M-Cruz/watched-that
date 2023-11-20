@@ -30,9 +30,4 @@ class VisualMediaRepositoryTest {
         assert(results.count { it.mediaType == MediaType.MOVIE } == 20)
     }
 
-    @Test
-    fun getAllGenres_returnsListOfGenres() = runTest {
-        val results = repository.getAllGenres()
-        assert(results.isNotEmpty())
-    }
 }

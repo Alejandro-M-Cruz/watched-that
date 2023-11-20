@@ -9,8 +9,6 @@ data class Movie(
     override val title: String,
     @SerialName("release_date")
     override val releaseDate: String,
-    @SerialName("genre_ids")
-    override val genreIds: List<Int>,
     @SerialName("vote_average")
     override val rating: Float,
     @SerialName("vote_count")

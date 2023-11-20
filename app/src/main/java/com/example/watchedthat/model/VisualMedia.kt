@@ -9,7 +9,6 @@ interface VisualMedia {
     val id: Int
     val title: String
     val releaseDate: String
-    val genreIds: List<Int>
     val rating: Float
     val ratingCount: Int
     val popularity: Float
@@ -33,5 +32,5 @@ interface VisualMedia {
         posterPath = posterPath,
         backdropPath = backdropPath,
         mediaType = mediaType
-    ).also { it.genreIds = genreIds }
+    )
 }
