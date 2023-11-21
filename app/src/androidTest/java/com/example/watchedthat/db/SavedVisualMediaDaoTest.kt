@@ -70,36 +70,6 @@ class SavedVisualMediaDaoTest {
     }
 
     @Test
-    fun addToWishList_addsItemToWishlist() = runBlocking {
-        addOneItemToWishList()
-        val wishlist = dao.getWishlist().first()
-        assertEquals(wishlist, listOf(savedVisualMedia1))
-    }
-
-    @Test
-    fun markAsWatched_marksItemAsWatched() = runBlocking {
-        addOneItemToWatched()
-        val watched = dao.getWatched().first()
-        assertEquals(watched, listOf(savedVisualMedia1))
-    }
-
-    @Test
-    fun removeFromWishlist_removesItemFromWishlist() = runBlocking {
-        addOneItemToWishList()
-        dao.removeFromWishlist(savedVisualMedia1)
-        val wishlist = dao.getWishlist().first()
-        assert(wishlist.isEmpty())
-    }
-
-    @Test
-    fun unmarkAsWatched_unmarksItemAsWatched() = runBlocking {
-        addOneItemToWatched()
-        dao.unmarkAsWatched(savedVisualMedia1)
-        val watched = dao.getWatched().first()
-        assert(watched.isEmpty())
-    }
-
-    @Test
     fun addToWishList_addsItemToWishlistAndRemovesItFromWatched() = runBlocking {
         addOneItemToWatched()
         dao.addToWishList(savedVisualMedia1)
@@ -117,5 +87,21 @@ class SavedVisualMediaDaoTest {
         val watched = dao.getWatched().first()
         assertEquals(watched, listOf(savedVisualMedia1))
         assert(wishlist.isEmpty())
+    }
+
+    @Test
+    fun removeFromWishlist_removesItemFromWishlist() = runBlocking {
+        addOneItemToWishList()
+        dao.removeFromWishlist(savedVisualMedia1)
+        val wishlist = dao.getWishlist().first()
+        assert(wishlist.isEmpty())
+    }
+
+    @Test
+    fun unmarkAsWatched_unmarksItemAsWatched() = runBlocking {
+        addOneItemToWatched()
+        dao.unmarkAsWatched(savedVisualMedia1)
+        val watched = dao.getWatched().first()
+        assert(watched.isEmpty())
     }
 }

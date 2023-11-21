@@ -8,5 +8,6 @@ enum class MediaType(val value: String) {
     @SerialName("movie")
     MOVIE("movie"),
     @SerialName("tv")
-    TV_SHOW("tv_show")
+    TV_SHOW("tv_show"),
+    UNKNOWN("unknown")
 }

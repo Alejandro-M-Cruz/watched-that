@@ -1,5 +1,6 @@
 package com.example.watchedthat.network
 
+import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.VisualMediaRepository
@@ -24,10 +25,23 @@ class VisualMediaRepositoryTest {
     }
 
     @Test
-    fun getTrending_returns20TrendingMoviesAnd20TrendingTvShows() = runTest {
-        val results = repository.getTrending()
-        assert(results.count { it.mediaType == MediaType.TV_SHOW } == 20)
-        assert(results.count { it.mediaType == MediaType.MOVIE } == 20)
+    fun getMoreSearchResults_returnsMoreResults() = runTest {
+        val firstPageResults = repository.search("Spielberg")
+        val secondPageResults = repository.getMoreSearchResults()
+        assert(firstPageResults != secondPageResults)
     }
 
+    @Test
+    fun getTrending_returnsTrendingVisualMedia() = runTest {
+        val results = repository.getTrending()
+        Log.d("Tests", results.toString())
+        assert(results.isNotEmpty())
+    }
+
+    @Test
+    fun getMoreTrending_returnsMoreTrendingMoviesAndTvShows() = runTest {
+        val firstPageResults = repository.getTrending()
+        val secondPageResults = repository.getMoreTrending()
+        assert(firstPageResults != secondPageResults)
+    }
 }

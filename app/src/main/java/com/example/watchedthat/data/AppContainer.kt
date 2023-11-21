@@ -3,10 +3,7 @@ package com.example.watchedthat.data
 import android.content.Context
 import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.Constants
-import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.db.AppDatabase
-import com.example.watchedthat.network.MoviesApiService
-import com.example.watchedthat.network.TvShowsApiService
 import com.example.watchedthat.network.VisualMediaApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -39,20 +36,8 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         )
         .build()
 
-    private val moviesApiService: MoviesApiService by lazy {
-        retrofit.create(MoviesApiService::class.java)
-    }
-
-    private val tvShowsApiService: TvShowsApiService by lazy {
-        retrofit.create(TvShowsApiService::class.java)
-    }
-
-    private val visualMediaApiService: VisualMediaApiService by lazy {
-        retrofit.create(VisualMediaApiService::class.java)
-    }
-
     override val visualMediaRepository: VisualMediaRepository by lazy {
-        NetworkVisualMediaRepository(moviesApiService, tvShowsApiService, visualMediaApiService)
+        NetworkVisualMediaRepository(retrofit.create(VisualMediaApiService::class.java))
     }
 
     override val savedVisualMediaRepository: SavedVisualMediaRepository by lazy {
