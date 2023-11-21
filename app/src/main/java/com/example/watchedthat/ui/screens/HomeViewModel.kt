@@ -14,27 +14,25 @@ import com.example.watchedthat.data.VisualMediaRepository
 import com.example.watchedthat.model.VisualMedia
 import kotlinx.coroutines.launch
 
-sealed interface MovieDiscoveryState {
-    data class Success(val savedVisualMedia: List<VisualMedia>) : MovieDiscoveryState
-    object Loading : MovieDiscoveryState
-    object Error : MovieDiscoveryState
+sealed interface VisualMediaRetrievalState {
+    data class Success(val visualMediaList: List<VisualMedia>) : VisualMediaRetrievalState
+    object Loading : VisualMediaRetrievalState
+    object Error : VisualMediaRetrievalState
 }
 
 class HomeViewModel(private val visualMediaRepository: VisualMediaRepository) : ViewModel() {
-    var movieDiscoveryState: MovieDiscoveryState by mutableStateOf(MovieDiscoveryState.Loading)
+    var visualMediaRetrievalState: VisualMediaRetrievalState by mutableStateOf(
+        VisualMediaRetrievalState.Loading
+    )
         private set
 
-    init {
-        discoverMovies()
-    }
-
-    fun discoverMovies() {
-        movieDiscoveryState = MovieDiscoveryState.Loading
+    fun loadTrendingVisualMedia() {
+        visualMediaRetrievalState = VisualMediaRetrievalState.Loading
         viewModelScope.launch {
-            movieDiscoveryState = try {
-                MovieDiscoveryState.Success(visualMediaRepository.getTrending())
+            visualMediaRetrievalState = try {
+                VisualMediaRetrievalState.Success(visualMediaRepository.getTrending())
             } catch (e: Exception) {
-                MovieDiscoveryState.Error
+                VisualMediaRetrievalState.Error
             }
         }
     }
