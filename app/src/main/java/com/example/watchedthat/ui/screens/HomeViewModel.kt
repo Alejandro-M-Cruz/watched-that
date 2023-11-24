@@ -41,8 +41,8 @@ class HomeViewModel(private val visualMediaRepository: VisualMediaRepository) : 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as WatchedThatApplication
-                val moviesRepository = application.container.visualMediaRepository
-                HomeViewModel(moviesRepository)
+                val visualMediaRepository = application.container.visualMediaRepository
+                HomeViewModel(visualMediaRepository)
             }
         }
     }

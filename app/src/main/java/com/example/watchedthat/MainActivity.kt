@@ -31,13 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
            WatchedThatTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
                 WatchedThatApp() //ui/theme/WatchedThatApp.kt -> HomeScreen
-                }
             }
         }
     }
