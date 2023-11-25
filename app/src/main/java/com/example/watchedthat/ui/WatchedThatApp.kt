@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -29,24 +30,39 @@ import androidx.navigation.compose.rememberNavController
 import com.example.watchedthat.R
 import com.example.watchedthat.ui.screens.HomeScreen
 import com.example.watchedthat.ui.screens.HomeViewModel
+import com.example.watchedthat.ui.screens.WatchedListScreen
+import com.example.watchedthat.ui.screens.WatchedListViewModel
+import com.example.watchedthat.ui.screens.WishlistScreen
+import com.example.watchedthat.ui.screens.WishlistViewModel
 
 enum class AppScreen(
     @StringRes val titleRes: Int,
     val icon: ImageVector,
     val iconDescription: String = ""
 ) {
-    HOME(R.string.home_title, Icons.Filled.Home, "Home navigation icon"),
-    WISHLIST(R.string.wishlist_title, Icons.Filled.Favorite, "Wishlist navigation icon"),
-    WATCHED_LIST(R.string.watched_list_title, Icons.Filled.CheckCircle, "Watched list navigation icon")
+    Home(
+        R.string.home_title,
+        Icons.Filled.Home,
+        "Home navigation icon"
+    ),
+    Wishlist(
+        R.string.wishlist_title,
+        Icons.Filled.Favorite,
+        "Wishlist navigation icon"
+    ),
+    WatchedList(
+        R.string.watched_list_title,
+        Icons.Filled.CheckCircle,
+        "Watched list navigation icon"
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WatchedThatApp() {
-    val navController = rememberNavController()
+fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route ?: AppScreen.HOME.name
+        backStackEntry?.destination?.route ?: AppScreen.Home.name
     )
 
     Scaffold(
@@ -61,19 +77,27 @@ fun WatchedThatApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreen.HOME.name,
+            startDestination = AppScreen.Home.name,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(route = AppScreen.HOME.name) {
+            composable(route = AppScreen.Home.name) {
                 val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
                 homeViewModel.loadTrendingVisualMedia()
-                HomeScreen(
-                    homeViewModel.visualMediaRetrievalState,
-                    retryAction = homeViewModel::loadTrendingVisualMedia
-                )
+                HomeScreen(homeViewModel)
+            }
+            composable(route = AppScreen.Wishlist.name) {
+                val wishlistViewModel: WishlistViewModel =
+                    viewModel(factory = WishlistViewModel.Factory)
+                wishlistViewModel.loadWishlist()
+                WishlistScreen(wishlistViewModel)
+            }
+            composable(route = AppScreen.WatchedList.name) {
+                val watchedListViewModel: WatchedListViewModel =
+                    viewModel(factory = WatchedListViewModel.Factory)
+                watchedListViewModel.loadWatchedList()
+                WatchedListScreen(watchedListViewModel)
             }
         }
-
     }
 }
 

@@ -1,0 +1,216 @@
+package com.example.watchedthat.ui.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.watchedthat.BuildConfig
+import com.example.watchedthat.R
+import com.example.watchedthat.fake.FakeDataSource
+import com.example.watchedthat.model.VisualMedia
+
+@Composable
+fun VisualMediaGrid(
+    visualMediaList: List<VisualMedia>,
+    modifier: Modifier = Modifier,
+    onEndReached: () -> Unit = {},
+    wishlistButtonOnClick: (VisualMedia) -> Unit = {},
+    watchedListButtonOnClick: (VisualMedia) -> Unit = {},
+) {
+    val gridState = rememberLazyGridState()
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(300.dp),
+        contentPadding = PaddingValues(4.dp),
+        state = gridState,
+        modifier = modifier.fillMaxSize()
+    ) {
+        items(items = visualMediaList, key = { listOf(it.id, it.mediaType.value)}) {
+            VisualMediaCard(
+                visualMedia = it,
+                wishlistButtonOnClick = wishlistButtonOnClick,
+                watchedListButtonOnClick = watchedListButtonOnClick,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+        }
+    }
+    val lastVisibleItemIndex by remember {
+        derivedStateOf {
+            gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+        }
+    }
+    if (lastVisibleItemIndex == visualMediaList.lastIndex) {
+        onEndReached()
+    }
+}
+
+@Composable
+fun VisualMediaCard(
+    visualMedia: VisualMedia,
+    modifier: Modifier = Modifier,
+    wishlistButtonOnClick: (VisualMedia) -> Unit = {},
+    watchedListButtonOnClick: (VisualMedia) -> Unit = {}
+) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        modifier = modifier
+    ) {
+        Column {
+            VisualMediaImage(
+                imageUrl = visualMedia.backdropUrl,
+                title = visualMedia.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(
+                    text = visualMedia.title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Row(modifier = Modifier.padding(8.dp)) {
+                    Icon(
+                        Icons.Filled.Star,
+                        contentDescription = null,
+                        tint = colorResource(R.color.star_yellow)
+                    )
+                    Text(
+                        text = "${"%.1f".format(visualMedia.rating)} (${visualMedia.ratingCount})",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, end = 8.dp)
+            ) {
+                Text(text = visualMedia.mediaType.displayName, modifier = Modifier.padding(8.dp))
+                Text(text = visualMedia.releaseDate, modifier = Modifier.padding(8.dp))
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, end = 8.dp, bottom = 6.dp)
+            ) {
+                WishlistButton(
+                    visualMedia = visualMedia,
+                    onClick = wishlistButtonOnClick
+                )
+                WatchedButton(
+                    visualMedia = visualMedia,
+                    onClick = watchedListButtonOnClick
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun VisualMediaImage(imageUrl: String?, modifier: Modifier = Modifier, title: String? = null) {
+    val imageRequest = ImageRequest
+        .Builder(LocalContext.current)
+        .addHeader("Authorization", "Bearer ${BuildConfig.TMDB_API_TOKEN}")
+        .data(imageUrl)
+        .crossfade(true)
+        .build()
+    AsyncImage(
+        model = imageRequest,
+        contentDescription = "Backdrop image for ${title ?: "a movie or TV show"}",
+        placeholder = painterResource(id = R.drawable.loading_img),
+        error = painterResource(id = R.drawable.ic_broken_image),
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun WatchedButton(
+    visualMedia: VisualMedia,
+    onClick: (VisualMedia) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(onClick = { onClick(visualMedia) }, modifier = modifier) {
+        Icon(
+            imageVector = Icons.Filled.CheckCircle,
+            contentDescription = "Button to indicate that a movie or TV show has been watched"
+        )
+    }
+}
+
+@Composable
+fun WishlistButton(
+    visualMedia: VisualMedia,
+    onClick: (VisualMedia) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(onClick = { onClick(visualMedia) }, modifier = modifier) {
+        Icon(
+            imageVector = Icons.Filled.Favorite,
+            contentDescription = "Button to add a movie or TV show to the wishlist"
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun VisualMediaImagePreview() {
+    VisualMediaImage(FakeDataSource.movieWithImages.backdropUrl)
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun VisualMediaCardPreview() {
+    VisualMediaCard(visualMedia = FakeDataSource.movieWithImages)
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun VisualMediaListPreview() {
+    VisualMediaGrid(visualMediaList = FakeDataSource.visualMediaWithImages)
+}

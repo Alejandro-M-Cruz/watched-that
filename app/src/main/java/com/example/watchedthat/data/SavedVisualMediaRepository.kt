@@ -6,12 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface SavedVisualMediaRepository {
     fun getWishlist(): Flow<List<SavedVisualMedia>>
-    fun getWatched(): Flow<List<SavedVisualMedia>>
-    suspend fun insertOrReplace(savedVisualMedia: SavedVisualMedia)
+    fun getWatchedList(): Flow<List<SavedVisualMedia>>
     suspend fun addToWishList(savedVisualMedia: SavedVisualMedia)
-    suspend fun markAsWatched(savedVisualMedia: SavedVisualMedia)
+    suspend fun addToWatchedList(savedVisualMedia: SavedVisualMedia)
     suspend fun removeFromWishlist(savedVisualMedia: SavedVisualMedia)
-    suspend fun unmarkAsWatched(savedVisualMedia: SavedVisualMedia)
+    suspend fun removeFromWatchedList(savedVisualMedia: SavedVisualMedia)
 }
 
 class OfflineSavedVisualMediaRepository(
@@ -21,11 +20,11 @@ class OfflineSavedVisualMediaRepository(
         return savedVisualMediaDao.getWishlist()
     }
 
-    override fun getWatched(): Flow<List<SavedVisualMedia>> {
+    override fun getWatchedList(): Flow<List<SavedVisualMedia>> {
         return savedVisualMediaDao.getWatched()
     }
 
-    override suspend fun insertOrReplace(savedVisualMedia: SavedVisualMedia) {
+    private suspend fun insertOrReplace(savedVisualMedia: SavedVisualMedia) {
         savedVisualMediaDao.insertOrReplace(savedVisualMedia)
     }
 
@@ -33,7 +32,7 @@ class OfflineSavedVisualMediaRepository(
         savedVisualMediaDao.addToWishList(savedVisualMedia)
     }
 
-    override suspend fun markAsWatched(savedVisualMedia: SavedVisualMedia) {
+    override suspend fun addToWatchedList(savedVisualMedia: SavedVisualMedia) {
         savedVisualMediaDao.markAsWatched(savedVisualMedia)
     }
 
@@ -41,7 +40,7 @@ class OfflineSavedVisualMediaRepository(
         savedVisualMediaDao.removeFromWishlist(savedVisualMedia)
     }
 
-    override suspend fun unmarkAsWatched(savedVisualMedia: SavedVisualMedia) {
+    override suspend fun removeFromWatchedList(savedVisualMedia: SavedVisualMedia) {
         savedVisualMediaDao.unmarkAsWatched(savedVisualMedia)
     }
 }

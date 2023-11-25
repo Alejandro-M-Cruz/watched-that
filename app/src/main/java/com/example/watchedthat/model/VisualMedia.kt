@@ -17,10 +17,10 @@ interface VisualMedia {
     val mediaType: MediaType
 
     val posterUrl: String?
-        get() = posterUrl?.let { "${Constants.BaseImageUrl}/$it" }
+        get() = posterPath?.let { "${Constants.BaseImageUrl}/$it" }
 
     val backdropUrl: String?
-        get() = backdropUrl?.let { "${Constants.BaseImageUrl}/$it" }
+        get() = backdropPath?.let { "${Constants.BaseImageUrl}/$it" }
 
     fun toSavedVisualMedia() = SavedVisualMedia(
         id = id,

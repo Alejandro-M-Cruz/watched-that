@@ -32,4 +32,15 @@ object FakeDataSource {
     val savedVisualMedia1 = movie1.toSavedVisualMedia()
     val savedVisualMedia2 = tvShow1.toSavedVisualMedia()
     val savedVisualMediaList = listOf(savedVisualMedia1, savedVisualMedia2)
+
+    val movieWithImages = movie1.copy(
+        posterPath = "/NNxYkU70HPurnNCSiCjYAmacwm.jpg",
+        backdropPath = "/6KErczPBROQty7QoIsaa6wJYXZi.jpg"
+    )
+    val tvShowWithImages = tvShow1.copy(
+        posterPath = "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
+        backdropPath = "/2OMB0ynKlyIenMJWI2Dy9IWT4c.jpg"
+    )
+    val visualMediaWithImages = listOf(movieWithImages, tvShowWithImages)
+
 }
