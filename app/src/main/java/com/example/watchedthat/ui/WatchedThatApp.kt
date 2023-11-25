@@ -38,22 +38,26 @@ import com.example.watchedthat.ui.screens.WishlistViewModel
 enum class AppScreen(
     @StringRes val titleRes: Int,
     val icon: ImageVector,
-    val iconDescription: String = ""
+    val iconDescription: String = "",
+    @StringRes val labelRes: Int
 ) {
     Home(
         R.string.home_title,
         Icons.Filled.Home,
-        "Home navigation icon"
+        iconDescription = "Home navigation icon",
+        labelRes = R.string.home_label
     ),
     Wishlist(
         R.string.wishlist_title,
         Icons.Filled.Favorite,
-        "Wishlist navigation icon"
+        iconDescription = "Wishlist navigation icon",
+        labelRes = R.string.wishlist_label
     ),
     WatchedList(
         R.string.watched_list_title,
         Icons.Filled.CheckCircle,
-        "Watched list navigation icon"
+        iconDescription = "Watched list navigation icon",
+        labelRes = R.string.watched_list_label
     )
 }
 
@@ -127,7 +131,8 @@ fun BottomNavigationBar(currentScreen: AppScreen, navigate: (AppScreen) -> Unit)
             NavigationBarItem(
                 selected = currentScreen == it,
                 onClick = { navigate(it) },
-                icon = { Icon(it.icon, contentDescription = it.iconDescription) }
+                icon = { Icon(it.icon, contentDescription = it.iconDescription) },
+                label = { Text(stringResource(id = it.labelRes)) }
             )
         }
     }

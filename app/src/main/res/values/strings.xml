@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">WatchedThat</string>
+
     <string name="home_title">Trending movies and TV shows</string>
     <string name="wishlist_title">Wishlist</string>
     <string name="watched_list_title">Watched that</string>
+    <string name="home_label">Home</string>
+    <string name="wishlist_label">Wishlist</string>
+    <string name="watched_list_label">Watched list</string>
 </resources>
