@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.VisualMediaGrid
+import com.example.watchedthat.ui.viewmodel.WatchedListViewModel
 
 @Composable
 fun WatchedListScreen(watchedListViewModel: WatchedListViewModel) {

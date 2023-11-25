@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.VisualMediaGrid
+import com.example.watchedthat.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel) {

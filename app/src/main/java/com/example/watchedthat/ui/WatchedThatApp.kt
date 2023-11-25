@@ -29,11 +29,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.watchedthat.R
 import com.example.watchedthat.ui.screens.HomeScreen
-import com.example.watchedthat.ui.screens.HomeViewModel
+import com.example.watchedthat.ui.viewmodel.HomeViewModel
 import com.example.watchedthat.ui.screens.WatchedListScreen
-import com.example.watchedthat.ui.screens.WatchedListViewModel
+import com.example.watchedthat.ui.viewmodel.WatchedListViewModel
 import com.example.watchedthat.ui.screens.WishlistScreen
-import com.example.watchedthat.ui.screens.WishlistViewModel
+import com.example.watchedthat.ui.viewmodel.WishlistViewModel
 
 enum class AppScreen(
     @StringRes val titleRes: Int,

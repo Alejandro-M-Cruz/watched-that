@@ -1,11 +1,10 @@
-package com.example.watchedthat.ui.screens
+package com.example.watchedthat.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -13,47 +12,48 @@ import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.SavedVisualMediaRepository
 import com.example.watchedthat.model.SavedVisualMedia
 import com.example.watchedthat.model.VisualMedia
+import com.example.watchedthat.ui.screens.SavedVisualMediaUiState
 import kotlinx.coroutines.launch
 
-class WatchedListViewModel(
+class WishlistViewModel(
     private val savedVisualMediaRepository: SavedVisualMediaRepository
 ) : ViewModel() {
-    var watchedListUiState: SavedVisualMediaUiState by mutableStateOf(
+    var wishlistUiState: SavedVisualMediaUiState by mutableStateOf(
         SavedVisualMediaUiState.Loading
     )
         private set
 
-    fun loadWatchedList() {
+    fun loadWishlist() {
         viewModelScope.launch {
-            watchedListUiState = SavedVisualMediaUiState.Loading
-            watchedListUiState = try {
-                val savedVisualMediaList = savedVisualMediaRepository.getWatchedList()
-                SavedVisualMediaUiState.Success(savedVisualMediaList)
+            wishlistUiState = SavedVisualMediaUiState.Loading
+            wishlistUiState = try {
+                val wishlist = savedVisualMediaRepository.getWishlist()
+                SavedVisualMediaUiState.Success(wishlist)
             } catch (e: Exception) {
                 SavedVisualMediaUiState.Error
             }
         }
     }
 
-    fun addToWishlist(savedVisualMedia: VisualMedia) {
+    fun addToWatchedList(savedVisualMedia: VisualMedia) {
         viewModelScope.launch {
-            savedVisualMediaRepository.addToWishList(savedVisualMedia as SavedVisualMedia)
+            savedVisualMediaRepository.addToWatchedList(savedVisualMedia as SavedVisualMedia)
         }
     }
 
-    fun removeFromWatched(savedVisualMedia: VisualMedia) {
+    fun removeFromWishlist(savedVisualMedia: VisualMedia) {
         viewModelScope.launch {
-            savedVisualMediaRepository.removeFromWatchedList(savedVisualMedia as SavedVisualMedia)
+            savedVisualMediaRepository.removeFromWishlist(savedVisualMedia as SavedVisualMedia)
         }
     }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[APPLICATION_KEY] as WatchedThatApplication
+                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as WatchedThatApplication
                 val savedVisualMediaRepository =
                     application.container.savedVisualMediaRepository
-                WatchedListViewModel(savedVisualMediaRepository)
+                WishlistViewModel(savedVisualMediaRepository)
             }
         }
     }

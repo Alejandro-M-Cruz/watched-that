@@ -1,4 +1,4 @@
-package com.example.watchedthat.ui.screens
+package com.example.watchedthat.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +13,7 @@ import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.SavedVisualMediaRepository
 import com.example.watchedthat.data.VisualMediaRepository
 import com.example.watchedthat.model.VisualMedia
+import com.example.watchedthat.ui.screens.VisualMediaUiState
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
