@@ -34,10 +34,13 @@ object FakeDataSource {
     val savedVisualMediaList = listOf(savedVisualMedia1, savedVisualMedia2)
 
     val movieWithImages = movie1.copy(
+        title = "This is a really long example title that should be wrapped",
+        ratingCount = 10000000,
         posterPath = "/NNxYkU70HPurnNCSiCjYAmacwm.jpg",
         backdropPath = "/6KErczPBROQty7QoIsaa6wJYXZi.jpg"
     )
     val tvShowWithImages = tvShow1.copy(
+        ratingCount = 10000000,
         posterPath = "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
         backdropPath = "/2OMB0ynKlyIenMJWI2Dy9IWT4c.jpg"
     )

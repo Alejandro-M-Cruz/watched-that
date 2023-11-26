@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -32,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -100,6 +103,7 @@ fun VisualMediaCard(
             )
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
@@ -108,20 +112,17 @@ fun VisualMediaCard(
                     text = visualMedia.title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+                        .weight(2f)
                 )
-                Row(modifier = Modifier.padding(8.dp)) {
-                    Icon(
-                        Icons.Filled.Star,
-                        contentDescription = null,
-                        tint = colorResource(R.color.star_yellow)
-                    )
-                    Text(
-                        text = "${"%.1f".format(visualMedia.rating)} (${visualMedia.ratingCount})",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                VisualMediaRating(
+                    rating = visualMedia.rating,
+                    ratingCount = visualMedia.ratingCount,
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 8.dp, start = 4.dp)
+                        .weight(1f)
+                )
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -148,6 +149,33 @@ fun VisualMediaCard(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun VisualMediaRating(rating: Float, ratingCount: Int, modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Row {
+            Icon(
+                Icons.Filled.Star,
+                contentDescription = null,
+                tint = colorResource(R.color.star_yellow)
+            )
+            Text(
+                text = "%.1f".format(rating),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Text(
+            text = "(${ratingCount})",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Light
+        )
     }
 }
 
