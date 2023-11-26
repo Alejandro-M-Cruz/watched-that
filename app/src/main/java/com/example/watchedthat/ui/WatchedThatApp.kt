@@ -70,9 +70,6 @@ fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
     )
 
     Scaffold(
-        topBar = {
-             TopSearchBar(currentScreen = currentScreen)
-        },
         bottomBar = {
             BottomNavigationBar(currentScreen = currentScreen, navigate = { screen ->
                 navController.navigate(screen.name)
@@ -115,11 +112,6 @@ fun TopSearchBar(currentScreen: AppScreen) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Filled.Search, contentDescription = "Search icon")
-            }
         }
     )
 }

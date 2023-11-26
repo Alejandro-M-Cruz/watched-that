@@ -1,9 +1,15 @@
 package com.example.watchedthat.ui.screens
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
+import com.example.watchedthat.ui.components.SearchBar
 import com.example.watchedthat.ui.components.VisualMediaGrid
 import com.example.watchedthat.ui.viewmodel.WishlistViewModel
 
@@ -14,11 +20,17 @@ fun WishlistScreen(wishlistViewModel: WishlistViewModel) {
             val visualMediaList =
                 (wishlistViewModel.wishlistUiState as SavedVisualMediaUiState.Success)
                     .visualMediaList
-            VisualMediaGrid(
-                visualMediaList = visualMediaList.collectAsState(initial = listOf()).value,
-                wishlistButtonOnClick = wishlistViewModel::removeFromWishlist,
-                watchedListButtonOnClick = wishlistViewModel::addToWatchedList
-            )
+            Column {
+                SearchBar(
+                    onSearch = wishlistViewModel::searchInWishlist,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                )
+                VisualMediaGrid(
+                    visualMediaList = visualMediaList.collectAsState(initial = listOf()).value,
+                    wishlistButtonOnClick = wishlistViewModel::removeFromWishlist,
+                    watchedListButtonOnClick = wishlistViewModel::addToWatchedList
+                )
+            }
         }
         is SavedVisualMediaUiState.Error ->
             ErrorScreen(

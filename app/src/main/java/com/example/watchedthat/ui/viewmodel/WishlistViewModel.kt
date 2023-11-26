@@ -47,6 +47,19 @@ class WishlistViewModel(
         }
     }
 
+    fun searchInWishlist(query: String) {
+        viewModelScope.launch {
+            wishlistUiState = SavedVisualMediaUiState.Loading
+            wishlistUiState = try {
+                val wishlist =
+                    savedVisualMediaRepository.searchInWishlist(query)
+                SavedVisualMediaUiState.Success(wishlist)
+            } catch (e: Exception) {
+                SavedVisualMediaUiState.Error
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

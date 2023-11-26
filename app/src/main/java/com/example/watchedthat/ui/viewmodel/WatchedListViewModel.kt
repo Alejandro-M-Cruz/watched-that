@@ -48,6 +48,19 @@ class WatchedListViewModel(
         }
     }
 
+    fun searchInWatchedList(query: String) {
+        viewModelScope.launch {
+            watchedListUiState = SavedVisualMediaUiState.Loading
+            watchedListUiState = try {
+                val savedVisualMediaList =
+                    savedVisualMediaRepository.searchInWatchedList(query)
+                SavedVisualMediaUiState.Success(savedVisualMediaList)
+            } catch (e: Exception) {
+                SavedVisualMediaUiState.Error
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

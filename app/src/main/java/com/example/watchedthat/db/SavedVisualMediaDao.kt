@@ -11,8 +11,17 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SavedVisualMediaDao {
-    @Query("SELECT * FROM visual_media WHERE title LIKE '%' || :title || '%'")
-    fun searchByTitle(title: String): Flow<List<SavedVisualMedia>>
+    @Query(
+        "SELECT * FROM visual_media " +
+        "WHERE title LIKE '%' || :query || '%' AND added_to_wishlist_at IS NOT NULL"
+    )
+    fun searchInWishlist(query: String): Flow<List<SavedVisualMedia>>
+
+    @Query(
+        "SELECT * FROM visual_media " +
+        "WHERE title LIKE '%' || :query || '%' AND watched_at IS NOT NULL"
+    )
+    fun searchInWatchedList(query: String): Flow<List<SavedVisualMedia>>
 
     @Query(
         "SELECT * FROM visual_media " +

@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface SavedVisualMediaRepository {
     fun getWishlist(): Flow<List<SavedVisualMedia>>
     fun getWatchedList(): Flow<List<SavedVisualMedia>>
+    fun searchInWishlist(query: String): Flow<List<SavedVisualMedia>>
+    fun searchInWatchedList(query: String): Flow<List<SavedVisualMedia>>
     suspend fun addToWishList(savedVisualMedia: SavedVisualMedia)
     suspend fun addToWatchedList(savedVisualMedia: SavedVisualMedia)
     suspend fun removeFromWishlist(savedVisualMedia: SavedVisualMedia)
@@ -24,8 +26,12 @@ class OfflineSavedVisualMediaRepository(
         return savedVisualMediaDao.getWatched()
     }
 
-    private suspend fun insertOrReplace(savedVisualMedia: SavedVisualMedia) {
-        savedVisualMediaDao.insertOrReplace(savedVisualMedia)
+    override fun searchInWishlist(query: String): Flow<List<SavedVisualMedia>> {
+        return savedVisualMediaDao.searchInWishlist(query)
+    }
+
+    override fun searchInWatchedList(query: String): Flow<List<SavedVisualMedia>> {
+        return savedVisualMediaDao.searchInWatchedList(query)
     }
 
     override suspend fun addToWishList(savedVisualMedia: SavedVisualMedia) {
