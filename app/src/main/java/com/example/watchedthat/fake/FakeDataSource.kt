@@ -6,7 +6,7 @@ import com.example.watchedthat.model.TvShow
 object FakeDataSource {
     val movie1 = Movie(
         id = 1,
-        title = "Title",
+        title = "title1",
         posterPath = "posterPath",
         backdropPath = "backdropPath",
         releaseDate = "releaseDate",
@@ -18,7 +18,7 @@ object FakeDataSource {
     val movieList = listOf(movie1, movie2)
     val tvShow1 = TvShow(
         id = 1,
-        title = "Title",
+        title = "title2",
         posterPath = "posterPath",
         backdropPath = "backdropPath",
         releaseDate = "releaseDate",

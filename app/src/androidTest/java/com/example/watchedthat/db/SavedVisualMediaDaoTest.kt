@@ -104,4 +104,22 @@ class SavedVisualMediaDaoTest {
         val watched = dao.getWatched().first()
         assert(watched.isEmpty())
     }
+
+    @Test
+    fun searchInWishlist_returnsItemsMatchingQuery() = runBlocking {
+        addOneItemToWatched()
+        addTwoItemsToWishList()
+        val query = "title2"
+        val wishlist = dao.searchInWishlist(query).first()
+        assertEquals(wishlist, listOf(savedVisualMedia2))
+    }
+
+    @Test
+    fun searchInWatchedList_returnsItemsMatchingQuery() = runBlocking {
+        addOneItemToWishList()
+        addTwoItemsToWatched()
+        val query = "title2"
+        val watched = dao.searchInWatchedList(query).first()
+        assertEquals(watched, listOf(savedVisualMedia2))
+    }
 }
