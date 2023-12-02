@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.watchedthat.model.visualmedia.VisualMedia
 import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.SearchBar
@@ -14,7 +15,10 @@ import com.example.watchedthat.ui.components.VisualMediaGrid
 import com.example.watchedthat.ui.viewmodel.WishlistViewModel
 
 @Composable
-fun WishlistScreen(wishlistViewModel: WishlistViewModel) {
+fun WishlistScreen(
+    wishlistViewModel: WishlistViewModel,
+    onNavigateToDetails: (VisualMedia) -> Unit
+) {
     when (wishlistViewModel.wishlistUiState) {
         is SavedVisualMediaUiState.Success -> {
             val visualMediaList =
@@ -28,7 +32,8 @@ fun WishlistScreen(wishlistViewModel: WishlistViewModel) {
                 VisualMediaGrid(
                     visualMediaList = visualMediaList.collectAsState(initial = listOf()).value,
                     wishlistButtonOnClick = wishlistViewModel::removeFromWishlist,
-                    watchedListButtonOnClick = wishlistViewModel::addToWatchedList
+                    watchedListButtonOnClick = wishlistViewModel::addToWatchedList,
+                    onNavigateToDetails = onNavigateToDetails
                 )
             }
         }

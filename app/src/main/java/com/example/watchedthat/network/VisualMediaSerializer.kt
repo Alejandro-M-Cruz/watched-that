@@ -1,12 +1,13 @@
 package com.example.watchedthat.network
 
 import com.example.watchedthat.model.MediaType
-import com.example.watchedthat.model.Movie
-import com.example.watchedthat.model.TvShow
-import com.example.watchedthat.model.VisualMedia
+import com.example.watchedthat.model.details.MovieDetails
+import com.example.watchedthat.model.details.TvShowDetails
+import com.example.watchedthat.model.visualmedia.Movie
+import com.example.watchedthat.model.visualmedia.TvShow
+import com.example.watchedthat.model.visualmedia.VisualMedia
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
@@ -23,7 +24,9 @@ class VisualMediaSerializer : JsonContentPolymorphicSerializer<VisualMedia>(Visu
             }
             "title" in jsonObject -> Movie.serializer()
             "name" in jsonObject -> TvShow.serializer()
-            else -> throw SerializationException("Could not determine media type")
+            "episode_run_time" in jsonObject -> TvShowDetails.serializer()
+            "runtime" in jsonObject -> MovieDetails.serializer()
+            else -> UnknownVisualMedia.serializer()
         }
     }
 }
@@ -31,21 +34,21 @@ class VisualMediaSerializer : JsonContentPolymorphicSerializer<VisualMedia>(Visu
 @Serializable
 class UnknownVisualMedia : VisualMedia {
     override val id: Int
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val title: String
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val releaseDate: String
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val rating: Float
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val ratingCount: Int
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val popularity: Float
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val posterPath: String
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val backdropPath: String
-        get() = throw UnsupportedOperationException("Unknown media type")
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
 
     override val mediaType = MediaType.UNKNOWN
 }

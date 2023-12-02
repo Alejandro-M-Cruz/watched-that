@@ -1,7 +1,7 @@
 package com.example.watchedthat.data
 
-import com.example.watchedthat.model.VisualMedia
-import com.example.watchedthat.model.TrendingTimeWindow
+import com.example.watchedthat.model.visualmedia.VisualMedia
+import com.example.watchedthat.model.visualmedia.TrendingTimeWindow
 import com.example.watchedthat.network.VisualMediaApiService
 
 interface VisualMediaRepository {

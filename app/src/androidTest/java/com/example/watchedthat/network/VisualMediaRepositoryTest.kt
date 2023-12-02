@@ -34,7 +34,6 @@ class VisualMediaRepositoryTest {
     @Test
     fun getTrending_returnsTrendingVisualMedia() = runTest {
         val results = repository.getTrending()
-        Log.d("Tests", results.toString())
         assert(results.isNotEmpty())
     }
 

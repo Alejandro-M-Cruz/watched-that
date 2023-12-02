@@ -4,6 +4,8 @@ import android.content.Context
 import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.Constants
 import com.example.watchedthat.db.AppDatabase
+import com.example.watchedthat.network.MovieDetailsApiService
+import com.example.watchedthat.network.TvShowDetailsApiService
 import com.example.watchedthat.network.VisualMediaApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -14,6 +16,8 @@ import retrofit2.Retrofit
 interface AppContainer {
     val visualMediaRepository: VisualMediaRepository
     val savedVisualMediaRepository: SavedVisualMediaRepository
+    val movieDetailsRepository: MovieDetailsRepository
+    val tvShowDetailsRepository: TvShowDetailsRepository
 }
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
@@ -38,6 +42,14 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val visualMediaRepository: VisualMediaRepository by lazy {
         NetworkVisualMediaRepository(retrofit.create(VisualMediaApiService::class.java))
+    }
+
+    override val movieDetailsRepository: MovieDetailsRepository by lazy {
+        NetworkMovieDetailsRepository(retrofit.create(MovieDetailsApiService::class.java))
+    }
+
+    override val tvShowDetailsRepository: TvShowDetailsRepository by lazy {
+        NetworkTvShowDetailsRepository(retrofit.create(TvShowDetailsApiService::class.java))
     }
 
     override val savedVisualMediaRepository: SavedVisualMediaRepository by lazy {

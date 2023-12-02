@@ -1,7 +1,7 @@
 package com.example.watchedthat.fake
 
-import com.example.watchedthat.model.Movie
-import com.example.watchedthat.model.TvShow
+import com.example.watchedthat.model.visualmedia.Movie
+import com.example.watchedthat.model.visualmedia.TvShow
 
 object FakeDataSource {
     val movie1 = Movie(

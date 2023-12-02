@@ -11,8 +11,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.SavedVisualMediaRepository
-import com.example.watchedthat.model.SavedVisualMedia
-import com.example.watchedthat.model.VisualMedia
+import com.example.watchedthat.model.visualmedia.SavedVisualMedia
+import com.example.watchedthat.model.visualmedia.VisualMedia
 import com.example.watchedthat.ui.screens.SavedVisualMediaUiState
 import kotlinx.coroutines.launch
 
@@ -23,6 +23,10 @@ class WatchedListViewModel(
         SavedVisualMediaUiState.Loading
     )
         private set
+
+    init {
+        loadWatchedList()
+    }
 
     fun loadWatchedList() {
         viewModelScope.launch {

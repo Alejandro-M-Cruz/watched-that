@@ -1,4 +1,4 @@
-package com.example.watchedthat.model
+package com.example.watchedthat.model.visualmedia
 
 enum class TrendingTimeWindow(val value: String) {
     TODAY("day"),

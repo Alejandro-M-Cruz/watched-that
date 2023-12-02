@@ -1,7 +1,7 @@
 package com.example.watchedthat.data
 
 import com.example.watchedthat.db.SavedVisualMediaDao
-import com.example.watchedthat.model.SavedVisualMedia
+import com.example.watchedthat.model.visualmedia.SavedVisualMedia
 import kotlinx.coroutines.flow.Flow
 
 interface SavedVisualMediaRepository {

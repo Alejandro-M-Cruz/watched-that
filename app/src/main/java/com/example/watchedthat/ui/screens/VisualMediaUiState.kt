@@ -1,7 +1,6 @@
 package com.example.watchedthat.ui.screens
 
-import com.example.watchedthat.model.VisualMedia
-import kotlinx.coroutines.flow.Flow
+import com.example.watchedthat.model.visualmedia.VisualMedia
 
 sealed interface VisualMediaUiState {
     data class Success(

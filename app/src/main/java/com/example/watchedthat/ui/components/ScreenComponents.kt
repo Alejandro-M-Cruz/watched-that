@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.watchedthat.R
@@ -31,15 +32,15 @@ fun ErrorScreen(
     retryAction: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.padding(16.dp).fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_connection_error),
             contentDescription = "Error icon"
         )
-        Text(text = errorMessage, modifier = Modifier.padding(16.dp))
+        Text(text = errorMessage, modifier = Modifier.padding(16.dp), textAlign = TextAlign.Center)
         Button(onClick = retryAction) {
             Text(text = "Retry")
         }

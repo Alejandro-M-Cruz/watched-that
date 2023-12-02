@@ -12,11 +12,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.SavedVisualMediaRepository
 import com.example.watchedthat.data.VisualMediaRepository
-import com.example.watchedthat.model.VisualMedia
+import com.example.watchedthat.model.visualmedia.VisualMedia
 import com.example.watchedthat.ui.screens.ResultType
 import com.example.watchedthat.ui.screens.VisualMediaUiState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -26,15 +24,23 @@ class HomeViewModel(
     var visualMediaUiState: VisualMediaUiState by mutableStateOf(VisualMediaUiState.Loading)
         private set
 
+    init {
+        loadTrendingVisualMedia()
+    }
+
     fun loadTrendingVisualMedia() {
         viewModelScope.launch {
             visualMediaUiState = VisualMediaUiState.Loading
             visualMediaUiState = try {
                 val visualMediaList = visualMediaRepository.getTrending()
-                VisualMediaUiState.Success(
-                    visualMediaList,
-                    ResultType.Trending
-                )
+                if (visualMediaList.isEmpty()) {
+                    VisualMediaUiState.Error
+                } else {
+                    VisualMediaUiState.Success(
+                        visualMediaList,
+                        ResultType.Trending
+                    )
+                }
             } catch (e: Exception) {
                 VisualMediaUiState.Error
             }

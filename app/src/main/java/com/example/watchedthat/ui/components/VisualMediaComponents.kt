@@ -1,5 +1,6 @@
 package com.example.watchedthat.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -27,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -41,7 +42,7 @@ import coil.request.ImageRequest
 import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.R
 import com.example.watchedthat.fake.FakeDataSource
-import com.example.watchedthat.model.VisualMedia
+import com.example.watchedthat.model.visualmedia.VisualMedia
 
 @Composable
 fun VisualMediaGrid(
@@ -50,6 +51,7 @@ fun VisualMediaGrid(
     onEndReached: () -> Unit = {},
     wishlistButtonOnClick: (VisualMedia) -> Unit = {},
     watchedListButtonOnClick: (VisualMedia) -> Unit = {},
+    onNavigateToDetails: (VisualMedia) -> Unit
 ) {
     val gridState = rememberLazyGridState()
     LazyVerticalGrid(
@@ -65,7 +67,8 @@ fun VisualMediaGrid(
                 watchedListButtonOnClick = watchedListButtonOnClick,
                 modifier = Modifier
                     .padding(8.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onNavigateToDetails = onNavigateToDetails
             )
         }
     }
@@ -74,7 +77,7 @@ fun VisualMediaGrid(
             gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
         }
     }
-    if (lastVisibleItemIndex == visualMediaList.lastIndex) {
+    if (lastVisibleItemIndex > 0 && lastVisibleItemIndex == visualMediaList.lastIndex) {
         onEndReached()
     }
 }
@@ -84,11 +87,11 @@ fun VisualMediaCard(
     visualMedia: VisualMedia,
     modifier: Modifier = Modifier,
     wishlistButtonOnClick: (VisualMedia) -> Unit = {},
-    watchedListButtonOnClick: (VisualMedia) -> Unit = {}
+    watchedListButtonOnClick: (VisualMedia) -> Unit = {},
+    onNavigateToDetails: (VisualMedia) -> Unit = {}
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
     ) {
         Column {
@@ -137,6 +140,7 @@ fun VisualMediaCard(
                     .fillMaxWidth()
                     .padding(start = 8.dp, end = 8.dp, bottom = 6.dp)
             ) {
+                DetailsButton(visualMedia, onNavigateToDetails = onNavigateToDetails)
                 WishlistButton(
                     visualMedia = visualMedia,
                     onClick = wishlistButtonOnClick
@@ -196,6 +200,16 @@ fun VisualMediaImage(imageUrl: String?, modifier: Modifier = Modifier, title: St
 }
 
 @Composable
+fun DetailsButton(visualMedia: VisualMedia, onNavigateToDetails: (VisualMedia) -> Unit) {
+    IconButton(onClick = { onNavigateToDetails(visualMedia) }) {
+        Icon(
+            imageVector = Icons.Filled.List,
+            contentDescription = "Button to navigate to the details screen"
+        )
+    }
+}
+
+@Composable
 fun WatchedButton(
     visualMedia: VisualMedia,
     onClick: (VisualMedia) -> Unit,
@@ -238,5 +252,8 @@ fun VisualMediaCardPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VisualMediaListPreview() {
-    VisualMediaGrid(visualMediaList = FakeDataSource.visualMediaWithImages)
+    VisualMediaGrid(
+        visualMediaList = FakeDataSource.visualMediaWithImages,
+        onNavigateToDetails = { }
+    )
 }

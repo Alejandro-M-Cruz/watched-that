@@ -1,8 +1,9 @@
-package com.example.watchedthat.model
+package com.example.watchedthat.model.visualmedia
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
+import com.example.watchedthat.model.MediaType
 
 @Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"], indices = [
     Index(value = ["title"]),

@@ -1,7 +1,6 @@
-package com.example.watchedthat.network
+package com.example.watchedthat.model.visualmedia
 
 import com.example.watchedthat.model.MediaType
-import com.example.watchedthat.model.VisualMedia
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

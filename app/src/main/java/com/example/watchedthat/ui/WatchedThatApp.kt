@@ -6,11 +6,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -22,81 +20,137 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.watchedthat.R
+import com.example.watchedthat.model.MediaType
+import com.example.watchedthat.model.visualmedia.VisualMedia
 import com.example.watchedthat.ui.screens.HomeScreen
-import com.example.watchedthat.ui.viewmodel.HomeViewModel
+import com.example.watchedthat.ui.screens.MovieDetailsScreen
+import com.example.watchedthat.ui.screens.TvShowDetailsScreen
 import com.example.watchedthat.ui.screens.WatchedListScreen
-import com.example.watchedthat.ui.viewmodel.WatchedListViewModel
 import com.example.watchedthat.ui.screens.WishlistScreen
+import com.example.watchedthat.ui.viewmodel.HomeViewModel
+import com.example.watchedthat.ui.viewmodel.MovieDetailsViewModel
+import com.example.watchedthat.ui.viewmodel.TvShowDetailsViewModel
+import com.example.watchedthat.ui.viewmodel.WatchedListViewModel
 import com.example.watchedthat.ui.viewmodel.WishlistViewModel
 
 enum class AppScreen(
+    val route: String,
     @StringRes val titleRes: Int,
-    val icon: ImageVector,
-    val iconDescription: String = "",
-    @StringRes val labelRes: Int
+    val inNavigationBar: Boolean = false,
+    @StringRes val labelRes: Int? = null,
+    val icon: ImageVector? = null,
+    val iconDescription: String = ""
 ) {
     Home(
-        R.string.home_title,
-        Icons.Filled.Home,
-        iconDescription = "Home navigation icon",
-        labelRes = R.string.home_label
+        route = "home",
+        titleRes = R.string.home_title,
+        inNavigationBar = true,
+        labelRes = R.string.home_label,
+        icon = Icons.Filled.Home,
+        iconDescription = "Home navigation icon"
     ),
     Wishlist(
-        R.string.wishlist_title,
-        Icons.Filled.Favorite,
-        iconDescription = "Wishlist navigation icon",
-        labelRes = R.string.wishlist_label
+        route = "wishlist",
+        titleRes = R.string.wishlist_title,
+        inNavigationBar = true,
+        labelRes = R.string.wishlist_label,
+        icon = Icons.Filled.Favorite,
+        iconDescription = "Wishlist navigation icon"
     ),
     WatchedList(
-        R.string.watched_list_title,
-        Icons.Filled.CheckCircle,
-        iconDescription = "Watched list navigation icon",
-        labelRes = R.string.watched_list_label
-    )
+        route = "watched_list",
+        titleRes = R.string.watched_list_title,
+        inNavigationBar = true,
+        labelRes = R.string.watched_list_label,
+        icon = Icons.Filled.CheckCircle,
+        iconDescription = "Watched list navigation icon"
+    ),
+    MovieDetails(
+        route = "movie/{movie_id}",
+        titleRes = R.string.movie_details_title,
+        inNavigationBar = false
+    ),
+    TvShowDetails(
+        route = "tv_show/{tv_show_id}",
+        titleRes = R.string.tv_show_details_title,
+        inNavigationBar = false
+    ),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route ?: AppScreen.Home.name
-    )
+    val currentScreen = AppScreen.values().find { screen ->
+        backStackEntry?.destination?.hierarchy?.any {
+            it.route == screen.route
+        } == true
+    } ?: AppScreen.Home
+    val onNavigateToDetails = { visualMedia: VisualMedia ->
+        when (visualMedia.mediaType) {
+            MediaType.MOVIE -> navController.navigate("movie/${visualMedia.id}")
+            MediaType.TV_SHOW -> navController.navigate("tv_show/${visualMedia.id}")
+            else -> { }
+        }
+    }
 
     Scaffold(
         bottomBar = {
             BottomNavigationBar(currentScreen = currentScreen, navigate = { screen ->
-                navController.navigate(screen.name)
+                navController.navigate(screen.route)
             })
         }
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreen.Home.name,
+            startDestination = AppScreen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(route = AppScreen.Home.name) {
+            composable(route = AppScreen.Home.route) {
                 val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
-                homeViewModel.loadTrendingVisualMedia()
-                HomeScreen(homeViewModel)
+                HomeScreen(homeViewModel, onNavigateToDetails)
             }
-            composable(route = AppScreen.Wishlist.name) {
+            composable(route = AppScreen.Wishlist.route) {
                 val wishlistViewModel: WishlistViewModel =
                     viewModel(factory = WishlistViewModel.Factory)
-                wishlistViewModel.loadWishlist()
-                WishlistScreen(wishlistViewModel)
+                WishlistScreen(wishlistViewModel, onNavigateToDetails)
             }
-            composable(route = AppScreen.WatchedList.name) {
+            composable(route = AppScreen.WatchedList.route) {
                 val watchedListViewModel: WatchedListViewModel =
                     viewModel(factory = WatchedListViewModel.Factory)
-                watchedListViewModel.loadWatchedList()
-                WatchedListScreen(watchedListViewModel)
+                WatchedListScreen(watchedListViewModel, onNavigateToDetails)
+            }
+            composable(
+                route = AppScreen.MovieDetails.route,
+                arguments = listOf(navArgument("movie_id") { type = NavType.StringType }),
+                deepLinks = listOf(navDeepLink { uriPattern = "watchedthat://movie/{movie_id}" })
+            ) { backStackEntry ->
+                val movieId = backStackEntry.arguments?.getString("movie_id")?.toIntOrNull()
+                val movieDetailsViewModel: MovieDetailsViewModel =
+                    viewModel(factory = MovieDetailsViewModel.Factory)
+                movieDetailsViewModel.loadMovieDetails(movieId = movieId!!)
+                MovieDetailsScreen(movieDetailsViewModel)
+            }
+            composable(
+                route = AppScreen.TvShowDetails.route,
+                arguments = listOf(navArgument("tv_show_id") { type = NavType.StringType }),
+                deepLinks = listOf(navDeepLink { uriPattern = "watchedthat://tv_show/{tv_show_id}" })
+            ) { backStackEntry ->
+                val tvShowId = backStackEntry.arguments?.getString("tv_show_id")?.toIntOrNull()
+                val tvShowDetailsViewModel: TvShowDetailsViewModel =
+                    viewModel(factory = TvShowDetailsViewModel.Factory)
+                tvShowDetailsViewModel.loadTvShowDetails(tvShowId = tvShowId!!)
+                TvShowDetailsScreen(tvShowDetailsViewModel)
             }
         }
     }
@@ -119,12 +173,12 @@ fun TopSearchBar(currentScreen: AppScreen) {
 @Composable
 fun BottomNavigationBar(currentScreen: AppScreen, navigate: (AppScreen) -> Unit) {
     NavigationBar {
-        AppScreen.values().forEach {
+        AppScreen.values().filter { it.inNavigationBar }.forEach {
             NavigationBarItem(
                 selected = currentScreen == it,
                 onClick = { navigate(it) },
-                icon = { Icon(it.icon, contentDescription = it.iconDescription) },
-                label = { Text(stringResource(id = it.labelRes)) }
+                icon = { Icon(it.icon!!, contentDescription = it.iconDescription) },
+                label = { Text(stringResource(id = it.labelRes!!)) }
             )
         }
     }

@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.watchedthat.model.SavedVisualMedia
+import com.example.watchedthat.model.visualmedia.SavedVisualMedia
 import kotlinx.coroutines.flow.Flow
 
 @Dao
