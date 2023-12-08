@@ -4,6 +4,8 @@ import com.example.watchedthat.model.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
 
 @Serializable
 data class MovieDetails(
@@ -35,9 +37,16 @@ data class MovieDetails(
 ) : VisualMediaDetails {
     override val mediaType = MediaType.MOVIE
 
-    val formattedBudget
-        get() = DecimalFormat("#,###").format(budget).replace(",", ".")
+    val formattedBudget: String
+        get() = if (revenue == 0L) "Unknown" else formatAmount(budget)
 
-    val formattedRevenue
-        get() = DecimalFormat("#,###").format(revenue).replace(",", ".")
+    val formattedRevenue: String
+        get() = if (revenue == 0L) "Unknown" else formatAmount(revenue)
+
+    private fun formatAmount(amount: Long): String {
+        val locale = Locale("en", "US")
+        val currencyFormatter = NumberFormat.getCurrencyInstance(locale)
+        currencyFormatter.maximumFractionDigits = 0
+        return currencyFormatter.format(amount)
+    }
 }

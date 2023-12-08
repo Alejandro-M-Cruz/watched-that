@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -94,21 +96,37 @@ fun MovieDetailsColumn(
                     TextDetail("Original language: ", movieDetails.originalLanguage),
                     TextDetail("Release date: ", movieDetails.releaseDate),
                     TextDetail("Runtime: ", "${movieDetails.runtimeInMinutes} minutes"),
-                    TextDetail("Budget: ", "$${movieDetails.formattedBudget}"),
-                    TextDetail("Revenue: ", "$${movieDetails.formattedRevenue}"),
-                    TextDetail("Popularity: ", "${movieDetails.popularity}"),
+                    TextDetail("Budget: ", movieDetails.formattedBudget),
+                    TextDetail("Revenue: ", movieDetails.formattedRevenue),
                     TextDetail("Overview: ", movieDetails.overview),
                 )) {
-                    TextDetailColumn(it.label, it.value)
+                    TextDetailColumn(
+                        it.label,
+                        it.value,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
                     Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp))
                 }
                 if (movieDetails.websiteUrl != null) {
                     item {
-                        WebsiteLink(websiteUrl = movieDetails.websiteUrl)
+                        WebsiteLink(
+                            text = "Website",
+                            websiteUrl = movieDetails.websiteUrl,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
                         Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp))
                     }
                 }
-
+                if (movieDetails.trailerUrl != null) {
+                    item {
+                        WebsiteLink(
+                            text = "Watch trailer on Youtube",
+                            websiteUrl = movieDetails.trailerUrl!!,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                        Divider(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp))
+                    }
+                }
             }
         }
     }
@@ -128,23 +146,26 @@ fun TextDetailColumn(label: String, value: String, modifier: Modifier = Modifier
 }
 
 @Composable
-fun WebsiteLink(websiteUrl: String, modifier: Modifier = Modifier) {
-    Text(
+fun WebsiteLink(text: String, websiteUrl: String, modifier: Modifier = Modifier) {
+    val uriHandler = LocalUriHandler.current
+    ClickableText(
         text = buildAnnotatedString {
             withStyle(style = SpanStyle(
                 fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.primary,
                 textDecoration = TextDecoration.Underline
             )) {
-                addStringAnnotation(
-                    tag = "Website",
-                    annotation = websiteUrl,
-                    start = 0,
-                    end = websiteUrl.length
-                )
+                append(text)
             }
+            addStringAnnotation(
+                tag = "URL",
+                annotation = websiteUrl,
+                start = 0,
+                end = text.length
+            )
         },
-        fontSize = 16.sp,
+        onClick = { uriHandler.openUri(websiteUrl) },
         modifier = modifier
     )
 }
