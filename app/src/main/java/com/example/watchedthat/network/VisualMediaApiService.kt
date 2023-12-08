@@ -9,12 +9,12 @@ interface VisualMediaApiService {
     @GET("search/multi?include_adult=false")
     suspend fun search(
         @Query("query") query: String,
-        @Query("page") page: Int? = null
+        @Query("page") page: Int = 1
     ): VisualMediaPagedResponse
 
     @GET("trending/all/{time_window}")
     suspend fun getTrending(
         @Path("time_window") timeWindow: String,
-        @Query("page") page: Int? = null
+        @Query("page") page: Int = 1
     ): VisualMediaPagedResponse
 }

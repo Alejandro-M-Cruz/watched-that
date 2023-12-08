@@ -42,7 +42,7 @@ class NetworkVisualMediaRepository(
 
     private suspend fun getTrendingVisualMedia(
         timeWindow: TrendingTimeWindow,
-        page: Int? = null
+        page: Int = 1
     ): List<VisualMedia> {
         return visualMediaApiService.getTrending(timeWindow.value, page).results
     }

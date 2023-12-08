@@ -27,7 +27,7 @@ class VisualMediaRepositoryTest {
     fun getMoreSearchResults_returnsMoreResults() = runTest {
         val firstPageResults = repository.search("Spielberg")
         val secondPageResults = repository.getMoreSearchResults()
-        assert(firstPageResults != secondPageResults)
+        assert(firstPageResults.none { secondPageResults.contains(it) })
     }
 
     @Test

@@ -25,6 +25,7 @@ data class TvShowDetails(
     override val overview: String,
     @SerialName("original_language")
     override val originalLanguageCode: String,
+    override val genres: List<Genre>,
     @SerialName("homepage")
     override val websiteUrl: String?,
     override val videos: VideoResults,
@@ -40,4 +41,24 @@ data class TvShowDetails(
     val inProduction: Boolean
 ) : VisualMediaDetails {
     override val mediaType = MediaType.TV_SHOW
+
+    val formattedEpisodeRuntimes: String
+        get() = if (episodeRuntimesInMinutes.isEmpty()) {
+            "Unknown"
+        } else {
+            episodeRuntimesInMinutes
+                .joinToString(", ").apply {
+                    val lastCommaIndex = lastIndexOf(",")
+                    if (lastCommaIndex != -1) {
+                        return replaceRange(lastCommaIndex, lastCommaIndex + 1, " or")
+                    }
+                } + " minutes"
+        }
+
+    val isInProduction: String
+        get() = if (inProduction) {
+            "Yes"
+        } else {
+            "No"
+        }
 }

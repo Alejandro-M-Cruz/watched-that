@@ -1,5 +1,6 @@
 package com.example.watchedthat.model.details
 
+import com.example.watchedthat.Constants
 import com.example.watchedthat.model.visualmedia.VisualMedia
 import com.example.watchedthat.network.VisualMediaDetailsSerializer
 import kotlinx.serialization.SerialName
@@ -13,16 +14,21 @@ interface VisualMediaDetails : VisualMedia {
     val originalLanguageCode: String
     val websiteUrl: String?
     val videos: VideoResults
+    val genres: List<Genre>
 
-    val trailerUrl: String?
+    val trailerPath: String?
         get() = videos.results.filter {
             it.isOfficial && it.site == "YouTube" && (it.type == "Trailer" || it.type == "Teaser")
-        }.maxByOrNull { it.releaseDate }?.let {
-            "https://www.youtube.com/watch?v=${it.path}"
-        }
+        }.maxByOrNull { it.releaseDate }?.path
+
+    val trailerUrl: String?
+        get() = trailerPath?.let { "${Constants.BaseVideoUrl}$it" }
 
     val originalLanguage: String
         get() = Locale(originalLanguageCode).getDisplayLanguage(Locale.ENGLISH)
+
+    val formattedGenres: String
+        get() = genres.joinToString { it.name }
 }
 
 @Serializable

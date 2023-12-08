@@ -49,7 +49,7 @@ class HomeViewModel(
 
     fun addToWishList(visualMedia: VisualMedia) {
         viewModelScope.launch {
-            savedVisualMediaRepository.addToWishList(visualMedia.toSavedVisualMedia())
+            savedVisualMediaRepository.addToWishlist(visualMedia.toSavedVisualMedia())
         }
     }
 

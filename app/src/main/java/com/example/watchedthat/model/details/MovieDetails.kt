@@ -3,7 +3,6 @@ package com.example.watchedthat.model.details
 import com.example.watchedthat.model.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -24,6 +23,7 @@ data class MovieDetails(
     override val backdropPath: String? = null,
     @SerialName("original_title")
     override val originalTitle: String,
+    override val genres: List<Genre>,
     val budget: Long,
     val revenue: Long,
     override val overview: String,

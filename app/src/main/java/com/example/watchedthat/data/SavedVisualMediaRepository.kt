@@ -11,7 +11,7 @@ interface SavedVisualMediaRepository {
     fun getWatchedList(): Flow<List<SavedVisualMedia>>
     fun searchInWishlist(query: String): Flow<List<SavedVisualMedia>>
     fun searchInWatchedList(query: String): Flow<List<SavedVisualMedia>>
-    suspend fun addToWishList(savedVisualMedia: SavedVisualMedia)
+    suspend fun addToWishlist(savedVisualMedia: SavedVisualMedia)
     suspend fun addToWatchedList(savedVisualMedia: SavedVisualMedia)
     suspend fun removeFromWishlist(savedVisualMedia: SavedVisualMedia)
     suspend fun removeFromWatchedList(savedVisualMedia: SavedVisualMedia)
@@ -40,7 +40,7 @@ class OfflineSavedVisualMediaRepository(
         return savedVisualMediaDao.searchInWatchedList(query)
     }
 
-    override suspend fun addToWishList(savedVisualMedia: SavedVisualMedia) {
+    override suspend fun addToWishlist(savedVisualMedia: SavedVisualMedia) {
         savedVisualMediaDao.addToWishList(savedVisualMedia)
     }
 

@@ -42,7 +42,7 @@ class WatchedListViewModel(
 
     fun addToWishlist(savedVisualMedia: VisualMedia) {
         viewModelScope.launch {
-            savedVisualMediaRepository.addToWishList(savedVisualMedia as SavedVisualMedia)
+            savedVisualMediaRepository.addToWishlist(savedVisualMedia as SavedVisualMedia)
         }
     }
 

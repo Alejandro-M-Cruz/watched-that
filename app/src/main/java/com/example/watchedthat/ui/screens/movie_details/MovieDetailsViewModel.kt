@@ -1,6 +1,5 @@
 package com.example.watchedthat.ui.screens.movie_details
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,11 +15,16 @@ import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.MovieDetailsRepository
 import com.example.watchedthat.data.SavedVisualMediaRepository
 import com.example.watchedthat.model.details.MovieDetails
+import com.example.watchedthat.model.visualmedia.SavedVisualMedia
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 sealed interface MovieDetailsUiState {
-    data class Success(val movieDetails: MovieDetails) : MovieDetailsUiState
+    data class Success(
+        val movieDetails: MovieDetails,
+        val savedVisualMedia: Flow<SavedVisualMedia?>
+    ) : MovieDetailsUiState
     object Error : MovieDetailsUiState
     object Loading : MovieDetailsUiState
 }
@@ -35,19 +39,22 @@ class MovieDetailsViewModel (
     private val movieId = savedStateHandle.get<Int>("movie_id")!!
     private val movieDetails
         get() = (movieDetailsUiState as MovieDetailsUiState.Success).movieDetails
+    private val savedVisualMediaFlow
+        get() = (movieDetailsUiState as MovieDetailsUiState.Success).savedVisualMedia
 
     init {
-        loadMovieDetails()
+        loadUiState()
     }
 
-    fun loadMovieDetails() {
+    fun loadUiState() {
         viewModelScope.launch {
             movieDetailsUiState = MovieDetailsUiState.Loading
             movieDetailsUiState = try {
                 val movieDetails = movieDetailsRepository.getMovieDetails(movieId)
-                MovieDetailsUiState.Success(movieDetails = movieDetails)
+                val savedVisualMedia = savedVisualMediaRepository
+                    .getByIdAndMediaType(movieDetails.id, movieDetails.mediaType)
+                MovieDetailsUiState.Success(movieDetails = movieDetails, savedVisualMedia)
             } catch (e: Exception) {
-                Log.d("MovieDetailsViewModel", "Error loading movie details", e)
                 MovieDetailsUiState.Error
             }
         }
@@ -55,21 +62,25 @@ class MovieDetailsViewModel (
 
     fun addToWishlist() {
         viewModelScope.launch {
-            val savedVisualMedia = savedVisualMediaRepository
-                .getByIdAndMediaType(movieDetails.id, movieDetails.mediaType).first()
-            savedVisualMediaRepository.addToWishList(
-                savedVisualMedia ?: movieDetails.toSavedVisualMedia()
-            )
+            val savedVisualMedia =
+                savedVisualMediaFlow.first() ?: movieDetails.toSavedVisualMedia()
+            if (savedVisualMedia.inWishlist) {
+                savedVisualMediaRepository.removeFromWishlist(savedVisualMedia)
+            } else {
+                savedVisualMediaRepository.addToWishlist(savedVisualMedia)
+            }
         }
     }
 
     fun addToWatchedList() {
         viewModelScope.launch {
-            val savedVisualMedia = savedVisualMediaRepository
-                .getByIdAndMediaType(movieDetails.id, movieDetails.mediaType).first()
-            savedVisualMediaRepository.addToWatchedList(
-                savedVisualMedia ?: movieDetails.toSavedVisualMedia()
-            )
+            val savedVisualMedia =
+                savedVisualMediaFlow.first() ?: movieDetails.toSavedVisualMedia()
+            if (savedVisualMedia.watched) {
+                savedVisualMediaRepository.removeFromWatchedList(savedVisualMedia)
+            } else {
+                savedVisualMediaRepository.addToWatchedList(savedVisualMedia)
+            }
         }
     }
 

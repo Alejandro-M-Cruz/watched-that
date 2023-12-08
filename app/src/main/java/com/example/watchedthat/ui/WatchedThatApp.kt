@@ -149,20 +149,6 @@ fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopSearchBar(currentScreen: AppScreen) {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = currentScreen.titleRes),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    )
-}
-
 @Composable
 fun BottomNavigationBar(currentScreen: AppScreen, navigate: (AppScreen) -> Unit) {
     NavigationBar {

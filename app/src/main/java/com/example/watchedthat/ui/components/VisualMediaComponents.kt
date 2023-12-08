@@ -17,7 +17,9 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -62,7 +64,7 @@ fun VisualMediaGrid(
         state = gridState,
         modifier = modifier.fillMaxSize()
     ) {
-        items(items = visualMediaList, key = { listOf(it.id, it.mediaType.value)}) {
+        items(items = visualMediaList) {
             if (it is SavedVisualMedia) {
                 SavedVisualMediaCard(
                     savedVisualMedia = it,
@@ -108,11 +110,11 @@ fun SavedVisualMediaCard(
         modifier = modifier,
         actions = {
             WishlistButton(
-                visualMedia = savedVisualMedia,
+                savedVisualMedia = savedVisualMedia,
                 onClick = wishlistButtonOnClick
             )
             WatchedButton(
-                visualMedia = savedVisualMedia,
+                savedVisualMedia = savedVisualMedia,
                 onClick = watchedListButtonOnClick
             )
         }
@@ -267,29 +269,43 @@ fun VisualMediaImage(
 
 @Composable
 fun WatchedButton(
-    visualMedia: VisualMedia,
+    savedVisualMedia: SavedVisualMedia,
     onClick: (VisualMedia) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(onClick = { onClick(visualMedia) }, modifier = modifier) {
-        Icon(
-            imageVector = Icons.Filled.CheckCircle,
-            contentDescription = "Button to indicate that a movie or TV show has been watched"
-        )
+    IconButton(onClick = { onClick(savedVisualMedia) }, modifier = modifier) {
+        if (savedVisualMedia.watched) {
+            Icon(
+                imageVector = Icons.Filled.CheckCircle,
+                contentDescription = "Button to remove a movie or TV show from the watched list"
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = "Button to add a movie or TV show to the watched list"
+            )
+        }
     }
 }
 
 @Composable
 fun WishlistButton(
-    visualMedia: VisualMedia,
+    savedVisualMedia: SavedVisualMedia,
     onClick: (VisualMedia) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(onClick = { onClick(visualMedia) }, modifier = modifier) {
-        Icon(
-            imageVector = Icons.Filled.Favorite,
-            contentDescription = "Button to add a movie or TV show to the wishlist"
-        )
+    IconButton(onClick = { onClick(savedVisualMedia) }, modifier = modifier) {
+        if (savedVisualMedia.inWishlist) {
+            Icon(
+                imageVector = Icons.Filled.Favorite,
+                contentDescription = "Button to remove a movie or TV show from the wishlist"
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Filled.FavoriteBorder,
+                contentDescription = "Button to add a movie or TV show to the wishlist"
+            )
+        }
     }
 }
 

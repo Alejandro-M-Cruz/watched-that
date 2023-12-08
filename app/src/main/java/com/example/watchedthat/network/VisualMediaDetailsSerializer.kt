@@ -1,5 +1,6 @@
 package com.example.watchedthat.network
 
+import com.example.watchedthat.model.details.Genre
 import com.example.watchedthat.model.details.MovieDetails
 import com.example.watchedthat.model.details.TvShowDetails
 import com.example.watchedthat.model.details.VideoResults
@@ -40,6 +41,8 @@ class UnknownVisualMediaDetails : VisualMediaDetails {
     override val backdropPath: String
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
     override val originalTitle: String
+        get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
+    override val genres: List<Genre>
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
     override val overview: String
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
