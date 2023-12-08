@@ -28,20 +28,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.navigation.navDeepLink
 import com.example.watchedthat.R
 import com.example.watchedthat.model.MediaType
 import com.example.watchedthat.model.visualmedia.VisualMedia
-import com.example.watchedthat.ui.screens.HomeScreen
-import com.example.watchedthat.ui.screens.MovieDetailsScreen
-import com.example.watchedthat.ui.screens.TvShowDetailsScreen
-import com.example.watchedthat.ui.screens.WatchedListScreen
-import com.example.watchedthat.ui.screens.WishlistScreen
-import com.example.watchedthat.ui.viewmodel.HomeViewModel
-import com.example.watchedthat.ui.viewmodel.MovieDetailsViewModel
-import com.example.watchedthat.ui.viewmodel.TvShowDetailsViewModel
-import com.example.watchedthat.ui.viewmodel.WatchedListViewModel
-import com.example.watchedthat.ui.viewmodel.WishlistViewModel
+import com.example.watchedthat.ui.screens.home.HomeScreen
+import com.example.watchedthat.ui.screens.movie_details.MovieDetailsScreen
+import com.example.watchedthat.ui.screens.tv_show_details.TvShowDetailsScreen
+import com.example.watchedthat.ui.screens.watched_list.WatchedListScreen
+import com.example.watchedthat.ui.screens.wishlist.WishlistScreen
+import com.example.watchedthat.ui.screens.home.HomeViewModel
+import com.example.watchedthat.ui.screens.movie_details.MovieDetailsViewModel
+import com.example.watchedthat.ui.screens.tv_show_details.TvShowDetailsViewModel
+import com.example.watchedthat.ui.screens.watched_list.WatchedListViewModel
+import com.example.watchedthat.ui.screens.wishlist.WishlistViewModel
 
 enum class AppScreen(
     val route: String,
@@ -132,24 +131,18 @@ fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
             }
             composable(
                 route = AppScreen.MovieDetails.route,
-                arguments = listOf(navArgument("movie_id") { type = NavType.StringType }),
-                deepLinks = listOf(navDeepLink { uriPattern = "watchedthat://movie/{movie_id}" })
-            ) { backStackEntry ->
-                val movieId = backStackEntry.arguments?.getString("movie_id")?.toIntOrNull()
+                arguments = listOf(navArgument("movie_id") { type = NavType.IntType })
+            ) {
                 val movieDetailsViewModel: MovieDetailsViewModel =
                     viewModel(factory = MovieDetailsViewModel.Factory)
-                movieDetailsViewModel.loadMovieDetails(movieId = movieId!!)
                 MovieDetailsScreen(movieDetailsViewModel)
             }
             composable(
                 route = AppScreen.TvShowDetails.route,
-                arguments = listOf(navArgument("tv_show_id") { type = NavType.StringType }),
-                deepLinks = listOf(navDeepLink { uriPattern = "watchedthat://tv_show/{tv_show_id}" })
-            ) { backStackEntry ->
-                val tvShowId = backStackEntry.arguments?.getString("tv_show_id")?.toIntOrNull()
+                arguments = listOf(navArgument("tv_show_id") { type = NavType.IntType })
+            ) {
                 val tvShowDetailsViewModel: TvShowDetailsViewModel =
                     viewModel(factory = TvShowDetailsViewModel.Factory)
-                tvShowDetailsViewModel.loadTvShowDetails(tvShowId = tvShowId!!)
                 TvShowDetailsScreen(tvShowDetailsViewModel)
             }
         }

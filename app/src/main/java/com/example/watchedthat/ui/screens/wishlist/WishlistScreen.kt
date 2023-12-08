@@ -1,4 +1,4 @@
-package com.example.watchedthat.ui.screens
+package com.example.watchedthat.ui.screens.wishlist
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,35 +12,35 @@ import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.SearchBar
 import com.example.watchedthat.ui.components.VisualMediaGrid
-import com.example.watchedthat.ui.viewmodel.WatchedListViewModel
+import com.example.watchedthat.ui.screens.SavedVisualMediaUiState
 
 @Composable
-fun WatchedListScreen(
-    watchedListViewModel: WatchedListViewModel,
+fun WishlistScreen(
+    wishlistViewModel: WishlistViewModel,
     onNavigateToDetails: (VisualMedia) -> Unit
 ) {
-    when (watchedListViewModel.watchedListUiState) {
+    when (wishlistViewModel.wishlistUiState) {
         is SavedVisualMediaUiState.Success -> {
             val visualMediaList =
-                (watchedListViewModel.watchedListUiState as SavedVisualMediaUiState.Success)
+                (wishlistViewModel.wishlistUiState as SavedVisualMediaUiState.Success)
                     .visualMediaList
             Column {
                 SearchBar(
-                    onSearch = watchedListViewModel::searchInWatchedList,
+                    onSearch = wishlistViewModel::searchInWishlist,
                     modifier = Modifier.fillMaxWidth().padding(8.dp)
                 )
-                VisualMediaGrid (
+                VisualMediaGrid(
                     visualMediaList = visualMediaList.collectAsState(initial = listOf()).value,
-                    wishlistButtonOnClick = watchedListViewModel::addToWishlist,
-                    watchedListButtonOnClick = watchedListViewModel::removeFromWatched,
+                    wishlistButtonOnClick = wishlistViewModel::removeFromWishlist,
+                    watchedListButtonOnClick = wishlistViewModel::addToWatchedList,
                     onNavigateToDetails = onNavigateToDetails
                 )
             }
         }
         is SavedVisualMediaUiState.Error ->
             ErrorScreen(
-                errorMessage = "Could not load watched movies and TV shows",
-                retryAction = watchedListViewModel::loadWatchedList
+                errorMessage = "Could not load movies and TV shows in the wishlist",
+                retryAction = wishlistViewModel::loadWishlist
             )
         is SavedVisualMediaUiState.Loading -> LoadingScreen()
     }

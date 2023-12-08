@@ -3,6 +3,7 @@ package com.example.watchedthat.model.details
 import com.example.watchedthat.model.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.text.DecimalFormat
 
 @Serializable
 data class MovieDetails(
@@ -25,12 +26,18 @@ data class MovieDetails(
     val revenue: Long,
     override val overview: String,
     @SerialName("original_language")
-    override val originalLanguage: String,
+    override val originalLanguageCode: String,
     @SerialName("homepage")
-    override val website: String?,
+    override val websiteUrl: String?,
     override val videos: VideoResults,
     @SerialName("runtime")
     val runtimeInMinutes: Int,
 ) : VisualMediaDetails {
     override val mediaType = MediaType.MOVIE
+
+    val formattedBudget
+        get() = DecimalFormat("#,###").format(budget).replace(",", ".")
+
+    val formattedRevenue
+        get() = DecimalFormat("#,###").format(revenue).replace(",", ".")
 }

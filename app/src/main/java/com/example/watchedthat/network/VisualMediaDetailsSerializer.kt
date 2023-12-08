@@ -43,9 +43,9 @@ class UnknownVisualMediaDetails : VisualMediaDetails {
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
     override val overview: String
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
-    override val originalLanguage: String
+    override val originalLanguageCode: String
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
-    override val website: String
+    override val websiteUrl: String
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
     override val videos: VideoResults
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")

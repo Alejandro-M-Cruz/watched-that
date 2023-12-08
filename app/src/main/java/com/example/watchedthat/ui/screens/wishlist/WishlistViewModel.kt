@@ -1,4 +1,4 @@
-package com.example.watchedthat.ui.viewmodel
+package com.example.watchedthat.ui.screens.wishlist
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

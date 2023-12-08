@@ -1,10 +1,12 @@
 package com.example.watchedthat.data
 
 import com.example.watchedthat.db.SavedVisualMediaDao
+import com.example.watchedthat.model.MediaType
 import com.example.watchedthat.model.visualmedia.SavedVisualMedia
 import kotlinx.coroutines.flow.Flow
 
 interface SavedVisualMediaRepository {
+    fun getByIdAndMediaType(id: Int, mediaType: MediaType): Flow<SavedVisualMedia?>
     fun getWishlist(): Flow<List<SavedVisualMedia>>
     fun getWatchedList(): Flow<List<SavedVisualMedia>>
     fun searchInWishlist(query: String): Flow<List<SavedVisualMedia>>
@@ -18,6 +20,10 @@ interface SavedVisualMediaRepository {
 class OfflineSavedVisualMediaRepository(
     private val savedVisualMediaDao: SavedVisualMediaDao
 ) : SavedVisualMediaRepository {
+    override fun getByIdAndMediaType(id: Int, mediaType: MediaType): Flow<SavedVisualMedia?> {
+        return savedVisualMediaDao.getByIdAndMediaType(id, mediaType)
+    }
+
     override fun getWishlist(): Flow<List<SavedVisualMedia>> {
         return savedVisualMediaDao.getWishlist()
     }

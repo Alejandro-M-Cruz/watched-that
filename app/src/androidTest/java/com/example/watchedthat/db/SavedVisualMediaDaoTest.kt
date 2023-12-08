@@ -52,6 +52,19 @@ class SavedVisualMediaDaoTest {
     }
 
     @Test
+    fun getByIdAndMediaType_returnsItemWithMatchingIdAndMediaType() = runBlocking {
+        addOneItemToWishList()
+        val savedVisualMedia = dao.getByIdAndMediaType(savedVisualMedia1.id, savedVisualMedia1.mediaType).first()
+        assertEquals(savedVisualMedia, savedVisualMedia1)
+    }
+
+    @Test
+    fun getByIdAndMediaType_returnsNullIfNoItemWithMatchingIdAndMediaType() = runBlocking {
+        val savedVisualMedia = dao.getByIdAndMediaType(savedVisualMedia1.id, savedVisualMedia1.mediaType).first()
+        assertEquals(savedVisualMedia, null)
+    }
+
+    @Test
     fun getWishList_returnsAllItemsAddedToWishlist() = runBlocking {
         addTwoItemsToWishList()
         val wishlist = dao.getWishlist().first()

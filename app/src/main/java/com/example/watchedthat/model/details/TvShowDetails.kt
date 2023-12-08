@@ -24,9 +24,9 @@ data class TvShowDetails(
     override val originalTitle: String,
     override val overview: String,
     @SerialName("original_language")
-    override val originalLanguage: String,
+    override val originalLanguageCode: String,
     @SerialName("homepage")
-    override val website: String?,
+    override val websiteUrl: String?,
     override val videos: VideoResults,
     @SerialName("episode_run_time")
     val episodeRuntimesInMinutes: List<Int>,

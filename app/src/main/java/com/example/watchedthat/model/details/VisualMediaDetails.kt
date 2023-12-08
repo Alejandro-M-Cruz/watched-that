@@ -4,13 +4,14 @@ import com.example.watchedthat.model.visualmedia.VisualMedia
 import com.example.watchedthat.network.VisualMediaDetailsSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 @Serializable(with= VisualMediaDetailsSerializer::class)
 interface VisualMediaDetails : VisualMedia {
     val originalTitle: String
     val overview: String
-    val originalLanguage: String
-    val website: String?
+    val originalLanguageCode: String
+    val websiteUrl: String?
     val videos: VideoResults
 
     val trailerUrl: String?
@@ -19,6 +20,9 @@ interface VisualMediaDetails : VisualMedia {
         }.maxByOrNull { it.releaseDate }?.let {
             "https://www.youtube.com/watch?v=${it.path}"
         }
+
+    val originalLanguage: String
+        get() = Locale(originalLanguageCode).getDisplayLanguage(Locale.ENGLISH)
 }
 
 @Serializable

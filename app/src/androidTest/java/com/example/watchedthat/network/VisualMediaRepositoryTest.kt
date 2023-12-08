@@ -1,6 +1,5 @@
 package com.example.watchedthat.network
 
-import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.VisualMediaRepository

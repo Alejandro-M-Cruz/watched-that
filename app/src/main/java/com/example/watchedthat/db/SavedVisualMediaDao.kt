@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.watchedthat.model.MediaType
 import com.example.watchedthat.model.visualmedia.SavedVisualMedia
 import kotlinx.coroutines.flow.Flow
 
@@ -34,6 +35,9 @@ interface SavedVisualMediaDao {
         "WHERE watched_at IS NOT NULL ORDER BY watched_at DESC"
     )
     fun getWatched(): Flow<List<SavedVisualMedia>>
+
+    @Query("SELECT * FROM visual_media WHERE id = :id AND media_type = :mediaType")
+    fun getByIdAndMediaType(id: Int, mediaType: MediaType): Flow<SavedVisualMedia?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrReplace(savedVisualMedia: SavedVisualMedia)

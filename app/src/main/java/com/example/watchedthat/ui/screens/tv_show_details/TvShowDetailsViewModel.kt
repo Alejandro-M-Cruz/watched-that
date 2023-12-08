@@ -1,10 +1,12 @@
-package com.example.watchedthat.ui.viewmodel
+package com.example.watchedthat.ui.screens.tv_show_details
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -20,12 +22,18 @@ sealed interface TvShowDetailsUiState {
 }
 
 class TvShowDetailsViewModel(
+    savedStateHandle: SavedStateHandle,
     private val tvShowDetailsRepository: TvShowDetailsRepository
 ) : ViewModel() {
     var tvShowDetailsUiState: TvShowDetailsUiState by mutableStateOf(TvShowDetailsUiState.Loading)
         private set
+    private val tvShowId = savedStateHandle.get<Int>("tv_show_id")!!
 
-    fun loadTvShowDetails(tvShowId: Int) {
+    init {
+        loadTvShowDetails()
+    }
+
+    fun loadTvShowDetails() {
         viewModelScope.launch {
             tvShowDetailsUiState = TvShowDetailsUiState.Loading
             tvShowDetailsUiState = try {
@@ -42,7 +50,7 @@ class TvShowDetailsViewModel(
             initializer {
                 val application = this[APPLICATION_KEY] as WatchedThatApplication
                 val tvShowDetailsRepository = application.container.tvShowDetailsRepository
-                TvShowDetailsViewModel(tvShowDetailsRepository)
+                TvShowDetailsViewModel(this.createSavedStateHandle(), tvShowDetailsRepository)
             }
         }
     }

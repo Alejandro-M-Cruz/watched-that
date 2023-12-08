@@ -1,4 +1,4 @@
-package com.example.watchedthat.ui.screens
+package com.example.watchedthat.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +11,7 @@ import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.SearchBar
 import com.example.watchedthat.ui.components.VisualMediaGrid
-import com.example.watchedthat.ui.viewmodel.HomeViewModel
+import com.example.watchedthat.ui.screens.VisualMediaUiState
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel, onNavigateToDetails: (VisualMedia) -> Unit) {
