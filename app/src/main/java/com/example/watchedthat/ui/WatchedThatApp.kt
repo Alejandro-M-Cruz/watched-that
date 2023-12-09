@@ -3,12 +3,14 @@ package com.example.watchedthat.ui
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -48,7 +50,8 @@ enum class AppScreen(
     val inNavigationBar: Boolean = false,
     @StringRes val labelRes: Int? = null,
     val icon: ImageVector? = null,
-    val iconDescription: String = ""
+    val iconDescription: String = "",
+    val hasTopBar: Boolean = false,
 ) {
     Home(
         route = "home",
@@ -77,12 +80,14 @@ enum class AppScreen(
     MovieDetails(
         route = "movie/{movie_id}",
         titleRes = R.string.movie_details_title,
-        inNavigationBar = false
+        inNavigationBar = false,
+        hasTopBar = true
     ),
     TvShowDetails(
         route = "tv_show/{tv_show_id}",
         titleRes = R.string.tv_show_details_title,
-        inNavigationBar = false
+        inNavigationBar = false,
+        hasTopBar = true
     ),
 }
 
@@ -104,6 +109,15 @@ fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
     }
 
     Scaffold(
+        topBar = {
+            if (currentScreen.hasTopBar) {
+                AppTopBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateBack = { navController.navigateUp() }
+                )
+            }
+        },
         bottomBar = {
             BottomNavigationBar(currentScreen = currentScreen, navigate = { screen ->
                 navController.navigate(screen.route)
@@ -147,6 +161,36 @@ fun WatchedThatApp(navController: NavHostController = rememberNavController()) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTopBar(
+    currentScreen: AppScreen,
+    modifier: Modifier = Modifier,
+    canNavigateBack: Boolean = true,
+    navigateBack: () -> Unit = {},
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = stringResource(id = currentScreen.titleRes),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateBack) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back icon"
+                    )
+                }
+            }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable
