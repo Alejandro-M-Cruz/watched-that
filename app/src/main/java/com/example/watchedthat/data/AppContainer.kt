@@ -9,6 +9,9 @@ import com.example.watchedthat.network.MovieDetailsApiService
 import com.example.watchedthat.network.TvShowDetailsApiService
 import com.example.watchedthat.network.VisualMediaApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -23,6 +26,7 @@ interface AppContainer {
 }
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
+    private val appContainerScope = CoroutineScope(Dispatchers.Default)
     private val jsonFormat = Json {
         ignoreUnknownKeys = true
     }
@@ -54,9 +58,12 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         NetworkTvShowDetailsRepository(retrofit.create(TvShowDetailsApiService::class.java))
     }
 
-    override val genresRepository: GenresRepository by lazy {
-        NetworkGenresRepository(retrofit.create(GenresApiService::class.java))
-    }
+    override val genresRepository: GenresRepository = DefaultGenresRepository(
+        retrofit.create(GenresApiService::class.java),
+        AppDatabase.getInstance(context).genreDao()
+    ).also {genresRepository -> appContainerScope.launch {
+        genresRepository.storeGenres(genresRepository.getAllGenres())
+    }}
 
     override val savedVisualMediaRepository: SavedVisualMediaRepository by lazy {
         OfflineSavedVisualMediaRepository(AppDatabase.getInstance(context).savedVisualMediaDao())

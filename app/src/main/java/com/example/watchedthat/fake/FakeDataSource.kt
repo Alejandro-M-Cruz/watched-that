@@ -47,4 +47,18 @@ object FakeDataSource {
         backdropPath = "/2OMB0ynKlyIenMJWI2Dy9IWT4c.jpg"
     )
     val visualMediaWithImages = listOf(movieWithImages, tvShowWithImages)
+    val genres = listOf(
+        com.example.watchedthat.model.genre.Genre(
+            id = 1,
+            name = "genre1"
+        ),
+        com.example.watchedthat.model.genre.Genre(
+            id = 2,
+            name = "genre2"
+        ),
+        com.example.watchedthat.model.genre.Genre(
+            id = 3,
+            name = "genre3"
+        )
+    )
 }
