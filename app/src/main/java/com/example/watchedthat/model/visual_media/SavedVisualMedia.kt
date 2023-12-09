@@ -1,9 +1,14 @@
-package com.example.watchedthat.model.visualmedia
+package com.example.watchedthat.model.visual_media
 
+import android.icu.text.DateFormat
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import com.example.watchedthat.model.MediaType
+import java.util.Date
+import java.util.Locale
 
 @Entity(tableName = "visual_media", primaryKeys = ["id", "media_type"], indices = [
     Index(value = ["title"]),
@@ -18,6 +23,8 @@ data class SavedVisualMedia(
     override val ratingCount: Int,
     @ColumnInfo(name = "release_date")
     override val releaseDate: String,
+    @ColumnInfo(name = "genre_ids")
+    val genreIdsString: String,
     override val popularity: Float,
     @ColumnInfo(name = "poster_path")
     override val posterPath: String? = null,
@@ -30,6 +37,22 @@ data class SavedVisualMedia(
     @ColumnInfo(name = "media_type")
     override val mediaType: MediaType,
 ) : VisualMedia {
+    override val genreIds: List<Int>
+        get() = genreIdsString.split(",").map { it.toInt() }
+
+    val addedToWishlistMonth: String?
+        get() = addedToWishlistAt?.let { isoDateStringToMonth(it) }
+
+    val watchedMonth: String?
+        get() = watchedAt?.let { isoDateStringToMonth(it) }
+
+    private fun isoDateStringToMonth(isoDateString: String): String {
+        Log.d("isoDateString", isoDateString)
+        return SimpleDateFormat("MMMM yyyy", Locale.ENGLISH).format(
+            SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(isoDateString)
+        )
+    }
+
     val watched: Boolean
         get() = watchedAt != null
 
@@ -37,7 +60,7 @@ data class SavedVisualMedia(
         get() = addedToWishlistAt != null
 
     fun addToWishlist() {
-        addedToWishlistAt = System.currentTimeMillis().toString()
+        addedToWishlistAt = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(Date())
         watchedAt = null
     }
 
@@ -46,7 +69,7 @@ data class SavedVisualMedia(
     }
 
     fun markAsWatched() {
-        watchedAt = System.currentTimeMillis().toString()
+        watchedAt = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(Date())
         addedToWishlistAt = null
     }
 

@@ -10,25 +10,43 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.watchedthat.WatchedThatApplication
+import com.example.watchedthat.data.GenresRepository
 import com.example.watchedthat.data.SavedVisualMediaRepository
 import com.example.watchedthat.data.VisualMediaRepository
-import com.example.watchedthat.model.visualmedia.VisualMedia
-import com.example.watchedthat.ui.screens.ResultType
-import com.example.watchedthat.ui.screens.VisualMediaUiState
+import com.example.watchedthat.model.genre.Genre
+import com.example.watchedthat.model.visual_media.VisualMedia
 import kotlinx.coroutines.launch
+
+sealed interface VisualMediaUiState {
+    data class Success(
+        val visualMediaList: List<VisualMedia>,
+        val resultType: ResultType,
+        val genres: List<Genre>,
+        val query: String? = null
+    ) : VisualMediaUiState
+    object Loading : VisualMediaUiState
+    object Error : VisualMediaUiState
+}
+
+enum class ResultType(val title: String) {
+    Trending("Trending today"),
+    Search("Search results")
+}
 
 class HomeViewModel(
     private val visualMediaRepository: VisualMediaRepository,
-    private val savedVisualMediaRepository: SavedVisualMediaRepository
+    private val savedVisualMediaRepository: SavedVisualMediaRepository,
+    private val genresRepository: GenresRepository
 ) : ViewModel() {
     var visualMediaUiState: VisualMediaUiState by mutableStateOf(VisualMediaUiState.Loading)
         private set
+    private var selectedGenres: Set<Genre> = emptySet()
 
     init {
-        loadTrendingVisualMedia()
+        loadUiState()
     }
 
-    fun loadTrendingVisualMedia() {
+    fun loadUiState() {
         viewModelScope.launch {
             visualMediaUiState = VisualMediaUiState.Loading
             visualMediaUiState = try {
@@ -38,7 +56,8 @@ class HomeViewModel(
                 } else {
                     VisualMediaUiState.Success(
                         visualMediaList,
-                        ResultType.Trending
+                        ResultType.Trending,
+                        genresRepository.getAllGenres().also { selectedGenres = it.toSet() }
                     )
                 }
             } catch (e: Exception) {
@@ -65,8 +84,10 @@ class HomeViewModel(
             visualMediaUiState = try {
                 val searchResults = visualMediaRepository.search(query)
                 VisualMediaUiState.Success(
-                    searchResults,
-                    ResultType.Search
+                    searchResults.filter { it.hasAnyGenreOf(selectedGenres) },
+                    ResultType.Search,
+                    genresRepository.getAllGenres(),
+                    query = query
                 )
             } catch (e: Exception) {
                 VisualMediaUiState.Error
@@ -82,10 +103,38 @@ class HomeViewModel(
                     ResultType.Trending -> visualMediaRepository.getMoreTrending()
                     ResultType.Search -> visualMediaRepository.getMoreSearchResults()
                 }
-                VisualMediaUiState.Success(
-                    uiState.visualMediaList + results,
-                    uiState.resultType
+                uiState.copy(
+                    visualMediaList = uiState.visualMediaList + results.filter {
+                        it.hasAnyGenreOf(selectedGenres)
+                    }
                 )
+            } catch (e: Exception) {
+                VisualMediaUiState.Error
+            }
+        }
+    }
+
+    fun selectedGenresChanged(genres: Set<Genre>) {
+        selectedGenres = genres
+        viewModelScope.launch {
+            val uiState = visualMediaUiState as VisualMediaUiState.Success
+            visualMediaUiState = try {
+                when (uiState.resultType) {
+                    ResultType.Trending -> {
+                        uiState.copy(
+                            visualMediaList = visualMediaRepository
+                                .getTrending()
+                                .filter { it.hasAnyGenreOf(genres) }
+                        )
+                    }
+                    ResultType.Search -> {
+                        uiState.copy(
+                            visualMediaList = visualMediaRepository
+                                .search(uiState.query!!)
+                                .filter { it.hasAnyGenreOf(genres) },
+                        )
+                    }
+                }
             } catch (e: Exception) {
                 VisualMediaUiState.Error
             }
@@ -99,7 +148,8 @@ class HomeViewModel(
                 val visualMediaRepository = application.container.visualMediaRepository
                 val savedVisualMediaRepository =
                     application.container.savedVisualMediaRepository
-                HomeViewModel(visualMediaRepository, savedVisualMediaRepository)
+                val genresRepository = application.container.genresRepository
+                HomeViewModel(visualMediaRepository, savedVisualMediaRepository, genresRepository)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.watchedthat.model.details
+package com.example.watchedthat.model.genre
 
 import kotlinx.serialization.Serializable
 

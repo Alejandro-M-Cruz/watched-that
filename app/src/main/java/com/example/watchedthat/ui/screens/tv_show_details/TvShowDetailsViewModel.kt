@@ -15,7 +15,7 @@ import com.example.watchedthat.WatchedThatApplication
 import com.example.watchedthat.data.SavedVisualMediaRepository
 import com.example.watchedthat.data.TvShowDetailsRepository
 import com.example.watchedthat.model.details.TvShowDetails
-import com.example.watchedthat.model.visualmedia.SavedVisualMedia
+import com.example.watchedthat.model.visual_media.SavedVisualMedia
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

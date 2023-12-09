@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.watchedthat.model.visualmedia.SavedVisualMedia
+import com.example.watchedthat.model.visual_media.SavedVisualMedia
 
-@Database(entities = [SavedVisualMedia::class], version = 5, exportSchema = false)
+@Database(entities = [SavedVisualMedia::class], version = 9, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun savedVisualMediaDao(): SavedVisualMediaDao
 

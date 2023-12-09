@@ -1,16 +1,17 @@
-package com.example.watchedthat.model.visualmedia
+package com.example.watchedthat.model.visual_media
 
 import com.example.watchedthat.model.MediaType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TvShow(
+data class Movie(
     override val id: Int,
-    @SerialName("name")
     override val title: String,
-    @SerialName("first_air_date")
+    @SerialName("release_date")
     override val releaseDate: String,
+    @SerialName("genre_ids")
+    override val genreIds: List<Int>,
     @SerialName("vote_average")
     override val rating: Float,
     @SerialName("vote_count")
@@ -19,8 +20,7 @@ data class TvShow(
     @SerialName("poster_path")
     override val posterPath: String? = null,
     @SerialName("backdrop_path")
-    override val backdropPath: String? = null
+    override val backdropPath: String? = null,
 ) : VisualMedia {
-    override val mediaType = MediaType.TV_SHOW
+    override val mediaType = MediaType.MOVIE
 }
-

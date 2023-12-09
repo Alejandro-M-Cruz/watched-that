@@ -1,6 +1,6 @@
 package com.example.watchedthat.network
 
-import com.example.watchedthat.model.details.Genre
+import com.example.watchedthat.model.genre.Genre
 import com.example.watchedthat.model.details.MovieDetails
 import com.example.watchedthat.model.details.TvShowDetails
 import com.example.watchedthat.model.details.VideoResults
@@ -54,4 +54,6 @@ class UnknownVisualMediaDetails : VisualMediaDetails {
         get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
 
     override val mediaType = throw UnsupportedOperationException("Unknown media type")
+    override val genreIds: List<Int>
+        get() = throw UnsupportedOperationException("Unknown VisualMediaDetails type")
 }

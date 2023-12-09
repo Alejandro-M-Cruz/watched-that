@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.watchedthat.model.details.MovieDetails
-import com.example.watchedthat.model.visualmedia.SavedVisualMedia
+import com.example.watchedthat.model.visual_media.SavedVisualMedia
 import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.ExternalLink
 import com.example.watchedthat.ui.components.LoadingScreen
@@ -56,9 +56,7 @@ fun MovieDetailsScreen(viewModel: MovieDetailsViewModel) {
                 retryAction = viewModel::loadUiState
             )
         }
-        is MovieDetailsUiState.Loading -> {
-            LoadingScreen()
-        }
+        is MovieDetailsUiState.Loading -> LoadingScreen()
     }
 }
 

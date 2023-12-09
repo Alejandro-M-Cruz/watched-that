@@ -1,7 +1,7 @@
 package com.example.watchedthat.fake
 
-import com.example.watchedthat.model.visualmedia.Movie
-import com.example.watchedthat.model.visualmedia.TvShow
+import com.example.watchedthat.model.visual_media.Movie
+import com.example.watchedthat.model.visual_media.TvShow
 
 object FakeDataSource {
     val movie1 = Movie(
@@ -12,7 +12,8 @@ object FakeDataSource {
         releaseDate = "releaseDate",
         rating = 1f,
         ratingCount = 1,
-        popularity = 1f
+        popularity = 1f,
+        genreIds = listOf(1, 2, 3)
     )
     val movie2 = movie1.copy(id = 2)
     val movieList = listOf(movie1, movie2)
@@ -24,7 +25,8 @@ object FakeDataSource {
         releaseDate = "releaseDate",
         rating = 1f,
         ratingCount = 1,
-        popularity = 1f
+        popularity = 1f,
+        genreIds = listOf(1, 2, 3)
     )
     val tvShow2 = tvShow1.copy(id = 2)
     val tvShowList = listOf(tvShow1, tvShow2)

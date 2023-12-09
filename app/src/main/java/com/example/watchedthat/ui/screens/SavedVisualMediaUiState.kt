@@ -1,6 +1,6 @@
 package com.example.watchedthat.ui.screens
 
-import com.example.watchedthat.model.visualmedia.SavedVisualMedia
+import com.example.watchedthat.model.visual_media.SavedVisualMedia
 import kotlinx.coroutines.flow.Flow
 
 sealed interface SavedVisualMediaUiState {

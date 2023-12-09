@@ -1,6 +1,6 @@
 package com.example.watchedthat.network
 
-import com.example.watchedthat.model.visualmedia.VisualMediaPagedResponse
+import com.example.watchedthat.model.visual_media.VisualMediaPagedResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

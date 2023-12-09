@@ -32,7 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.watchedthat.R
 import com.example.watchedthat.model.MediaType
-import com.example.watchedthat.model.visualmedia.VisualMedia
+import com.example.watchedthat.model.visual_media.VisualMedia
 import com.example.watchedthat.ui.screens.home.HomeScreen
 import com.example.watchedthat.ui.screens.movie_details.MovieDetailsScreen
 import com.example.watchedthat.ui.screens.tv_show_details.TvShowDetailsScreen

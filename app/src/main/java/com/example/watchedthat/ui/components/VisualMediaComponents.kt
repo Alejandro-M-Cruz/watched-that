@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -45,12 +46,12 @@ import coil.request.ImageRequest
 import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.R
 import com.example.watchedthat.fake.FakeDataSource
-import com.example.watchedthat.model.visualmedia.SavedVisualMedia
-import com.example.watchedthat.model.visualmedia.VisualMedia
+import com.example.watchedthat.model.visual_media.SavedVisualMedia
+import com.example.watchedthat.model.visual_media.VisualMedia
 
 @Composable
 fun VisualMediaGrid(
-    visualMediaList: List<VisualMedia>,
+    groupedVisualMedia: Map<String, List<VisualMedia>>,
     modifier: Modifier = Modifier,
     onNavigateToDetails: (VisualMedia) -> Unit,
     onEndReached: () -> Unit = {},
@@ -64,34 +65,48 @@ fun VisualMediaGrid(
         state = gridState,
         modifier = modifier.fillMaxSize()
     ) {
-        items(items = visualMediaList) {
-            if (it is SavedVisualMedia) {
-                SavedVisualMediaCard(
-                    savedVisualMedia = it,
-                    wishlistButtonOnClick = wishlistButtonOnClick!!,
-                    watchedListButtonOnClick = watchedListButtonOnClick!!,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    onNavigateToDetails = onNavigateToDetails
+        groupedVisualMedia.forEach { (title, visualMediaList) ->
+            item {
+                Text(
+                    text = title,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp),
                 )
-            } else {
-                VisualMediaCard(
-                    visualMedia = it,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    onNavigateToDetails = onNavigateToDetails
-                )
+            }
+            items(visualMediaList) {
+                if (it is SavedVisualMedia) {
+                    SavedVisualMediaCard(
+                        savedVisualMedia = it,
+                        wishlistButtonOnClick = wishlistButtonOnClick!!,
+                        watchedListButtonOnClick = watchedListButtonOnClick!!,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        onNavigateToDetails = onNavigateToDetails
+                    )
+                } else {
+                    VisualMediaCard(
+                        visualMedia = it,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        onNavigateToDetails = onNavigateToDetails
+                    )
+                }
             }
         }
     }
-    val lastVisibleItemIndex by remember {
+    val endReached by remember {
         derivedStateOf {
-            gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val lastVisibleItem = gridState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val lastIndex = gridState.layoutInfo.totalItemsCount - 1
+            lastVisibleItem != null && lastVisibleItem.index == lastIndex
         }
     }
-    if (lastVisibleItemIndex > 0 && lastVisibleItemIndex == visualMediaList.lastIndex) {
+    if (endReached) {
         onEndReached()
     }
 }
@@ -325,7 +340,7 @@ fun VisualMediaCardPreview() {
 @Composable
 fun VisualMediaListPreview() {
     VisualMediaGrid(
-        visualMediaList = FakeDataSource.visualMediaWithImages,
+        groupedVisualMedia = FakeDataSource.visualMediaWithImages.groupBy { it.releaseDate },
         onNavigateToDetails = { }
     )
 }

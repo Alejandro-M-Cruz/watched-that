@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.watchedthat.model.visualmedia.VisualMedia
+import com.example.watchedthat.model.visual_media.VisualMedia
 import com.example.watchedthat.ui.components.ErrorScreen
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.SearchBar
@@ -24,13 +24,17 @@ fun WishlistScreen(
             val visualMediaList =
                 (wishlistViewModel.wishlistUiState as SavedVisualMediaUiState.Success)
                     .visualMediaList
+            val groupedVisualMedia = visualMediaList
+                .collectAsState(initial = listOf())
+                .value
+                .groupBy { it.addedToWishlistMonth!! }
             Column {
                 SearchBar(
                     onSearch = wishlistViewModel::searchInWishlist,
                     modifier = Modifier.fillMaxWidth().padding(8.dp)
                 )
                 VisualMediaGrid(
-                    visualMediaList = visualMediaList.collectAsState(initial = listOf()).value,
+                    groupedVisualMedia = groupedVisualMedia,
                     wishlistButtonOnClick = wishlistViewModel::removeFromWishlist,
                     watchedListButtonOnClick = wishlistViewModel::addToWatchedList,
                     onNavigateToDetails = onNavigateToDetails

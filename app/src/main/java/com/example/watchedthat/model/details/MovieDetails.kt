@@ -1,6 +1,7 @@
 package com.example.watchedthat.model.details
 
 import com.example.watchedthat.model.MediaType
+import com.example.watchedthat.model.genre.Genre
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.text.NumberFormat

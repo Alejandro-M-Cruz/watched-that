@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.watchedthat.BuildConfig
 import com.example.watchedthat.Constants
 import com.example.watchedthat.db.AppDatabase
+import com.example.watchedthat.network.GenresApiService
 import com.example.watchedthat.network.MovieDetailsApiService
 import com.example.watchedthat.network.TvShowDetailsApiService
 import com.example.watchedthat.network.VisualMediaApiService
@@ -18,6 +19,7 @@ interface AppContainer {
     val savedVisualMediaRepository: SavedVisualMediaRepository
     val movieDetailsRepository: MovieDetailsRepository
     val tvShowDetailsRepository: TvShowDetailsRepository
+    val genresRepository: GenresRepository
 }
 
 class DefaultAppContainer(private val context: Context) : AppContainer {
@@ -50,6 +52,10 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
 
     override val tvShowDetailsRepository: TvShowDetailsRepository by lazy {
         NetworkTvShowDetailsRepository(retrofit.create(TvShowDetailsApiService::class.java))
+    }
+
+    override val genresRepository: GenresRepository by lazy {
+        NetworkGenresRepository(retrofit.create(GenresApiService::class.java))
     }
 
     override val savedVisualMediaRepository: SavedVisualMediaRepository by lazy {

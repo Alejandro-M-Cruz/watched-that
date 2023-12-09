@@ -3,9 +3,9 @@ package com.example.watchedthat.network
 import com.example.watchedthat.model.MediaType
 import com.example.watchedthat.model.details.MovieDetails
 import com.example.watchedthat.model.details.TvShowDetails
-import com.example.watchedthat.model.visualmedia.Movie
-import com.example.watchedthat.model.visualmedia.TvShow
-import com.example.watchedthat.model.visualmedia.VisualMedia
+import com.example.watchedthat.model.visual_media.Movie
+import com.example.watchedthat.model.visual_media.TvShow
+import com.example.watchedthat.model.visual_media.VisualMedia
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
@@ -48,6 +48,8 @@ class UnknownVisualMedia : VisualMedia {
     override val posterPath: String
         get() = throw UnsupportedOperationException("Unknown VisualMedia type")
     override val backdropPath: String
+        get() = throw UnsupportedOperationException("Unknown VisualMedia type")
+    override val genreIds: List<Int>
         get() = throw UnsupportedOperationException("Unknown VisualMedia type")
 
     override val mediaType = MediaType.UNKNOWN
