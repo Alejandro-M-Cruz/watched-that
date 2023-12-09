@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.watchedthat.model.visual_media.VisualMedia
 import com.example.watchedthat.ui.components.ErrorScreen
+import com.example.watchedthat.ui.components.GenreFilters
 import com.example.watchedthat.ui.components.LoadingScreen
 import com.example.watchedthat.ui.components.SearchBar
 import com.example.watchedthat.ui.components.VisualMediaGrid
@@ -21,18 +22,25 @@ fun WishlistScreen(
 ) {
     when (wishlistViewModel.wishlistUiState) {
         is SavedVisualMediaUiState.Success -> {
-            val visualMediaList =
-                (wishlistViewModel.wishlistUiState as SavedVisualMediaUiState.Success)
-                    .visualMediaList
-            val groupedVisualMedia = visualMediaList
+            val uiState = wishlistViewModel.wishlistUiState as SavedVisualMediaUiState.Success
+            val groupedVisualMedia = uiState.visualMediaList
                 .collectAsState(initial = listOf())
                 .value
                 .groupBy { it.addedToWishlistMonth!! }
+            val genres = uiState.genres.collectAsState(initial = emptyList()).value
             Column {
                 SearchBar(
                     onSearch = wishlistViewModel::searchInWishlist,
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
                 )
+                if (genres.isNotEmpty()) {
+                    GenreFilters(
+                        genres = genres,
+                        onSelectedGenres = wishlistViewModel::selectedGenresChanged
+                    )
+                }
                 VisualMediaGrid(
                     groupedVisualMedia = groupedVisualMedia,
                     wishlistButtonOnClick = wishlistViewModel::removeFromWishlist,

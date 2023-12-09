@@ -51,8 +51,7 @@ fun GenreFilters(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
-                        contentDescription = "Clear all filters",
-                        modifier = Modifier.size(FilterChipDefaults.IconSize)
+                        contentDescription = "Clear all filters"
                     )
                 }
             } else {
@@ -65,8 +64,7 @@ fun GenreFilters(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Check,
-                        contentDescription = "Select all filters",
-                        modifier = Modifier.size(FilterChipDefaults.IconSize)
+                        contentDescription = "Select all filters"
                     )
                 }
             }

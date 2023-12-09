@@ -10,19 +10,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.watchedthat.WatchedThatApplication
+import com.example.watchedthat.data.GenresRepository
 import com.example.watchedthat.data.SavedVisualMediaRepository
+import com.example.watchedthat.model.genre.Genre
 import com.example.watchedthat.model.visual_media.SavedVisualMedia
 import com.example.watchedthat.model.visual_media.VisualMedia
 import com.example.watchedthat.ui.screens.SavedVisualMediaUiState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class WatchedListViewModel(
-    private val savedVisualMediaRepository: SavedVisualMediaRepository
+    private val savedVisualMediaRepository: SavedVisualMediaRepository,
+    private val genresRepository: GenresRepository
 ) : ViewModel() {
     var watchedListUiState: SavedVisualMediaUiState by mutableStateOf(
         SavedVisualMediaUiState.Loading
     )
         private set
+    private lateinit var watchedList: Flow<List<SavedVisualMedia>>
 
     init {
         loadWatchedList()
@@ -32,8 +38,11 @@ class WatchedListViewModel(
         viewModelScope.launch {
             watchedListUiState = SavedVisualMediaUiState.Loading
             watchedListUiState = try {
-                val savedVisualMediaList = savedVisualMediaRepository.getWatchedList()
-                SavedVisualMediaUiState.Success(savedVisualMediaList)
+                watchedList = savedVisualMediaRepository.getWatchedList()
+                SavedVisualMediaUiState.Success(
+                    visualMediaList = watchedList,
+                    genres = genresRepository.getStoredGenres()
+                )
             } catch (e: Exception) {
                 SavedVisualMediaUiState.Error
             }
@@ -54,15 +63,24 @@ class WatchedListViewModel(
 
     fun searchInWatchedList(query: String) {
         viewModelScope.launch {
+            val uiState = watchedListUiState as SavedVisualMediaUiState.Success
             watchedListUiState = SavedVisualMediaUiState.Loading
             watchedListUiState = try {
-                val savedVisualMediaList =
-                    savedVisualMediaRepository.searchInWatchedList(query)
-                SavedVisualMediaUiState.Success(savedVisualMediaList)
+                watchedList = savedVisualMediaRepository.searchInWatchedList(query)
+                uiState.copy(visualMediaList = watchedList)
             } catch (e: Exception) {
                 SavedVisualMediaUiState.Error
             }
         }
+    }
+
+    fun selectedGenresChanged(genres: Set<Genre>) {
+        val uiState = watchedListUiState as SavedVisualMediaUiState.Success
+        watchedListUiState = uiState.copy(
+            visualMediaList = watchedList.map {
+                it.filter { visualMedia -> visualMedia.hasAnyGenreOf(genres) }
+            }
+        )
     }
 
     companion object {
@@ -71,7 +89,8 @@ class WatchedListViewModel(
                 val application = this[APPLICATION_KEY] as WatchedThatApplication
                 val savedVisualMediaRepository =
                     application.container.savedVisualMediaRepository
-                WatchedListViewModel(savedVisualMediaRepository)
+                val genresRepository = application.container.genresRepository
+                WatchedListViewModel(savedVisualMediaRepository, genresRepository)
             }
         }
     }

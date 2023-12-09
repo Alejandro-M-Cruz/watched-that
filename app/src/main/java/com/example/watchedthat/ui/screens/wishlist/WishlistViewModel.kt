@@ -9,19 +9,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.watchedthat.WatchedThatApplication
+import com.example.watchedthat.data.GenresRepository
 import com.example.watchedthat.data.SavedVisualMediaRepository
+import com.example.watchedthat.model.genre.Genre
 import com.example.watchedthat.model.visual_media.SavedVisualMedia
 import com.example.watchedthat.model.visual_media.VisualMedia
 import com.example.watchedthat.ui.screens.SavedVisualMediaUiState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class WishlistViewModel(
-    private val savedVisualMediaRepository: SavedVisualMediaRepository
+    private val savedVisualMediaRepository: SavedVisualMediaRepository,
+    private val genresRepository: GenresRepository
 ) : ViewModel() {
     var wishlistUiState: SavedVisualMediaUiState by mutableStateOf(
         SavedVisualMediaUiState.Loading
     )
         private set
+    private lateinit var wishlist: Flow<List<SavedVisualMedia>>
 
     init {
         loadWishlist()
@@ -31,8 +37,9 @@ class WishlistViewModel(
         viewModelScope.launch {
             wishlistUiState = SavedVisualMediaUiState.Loading
             wishlistUiState = try {
-                val wishlist = savedVisualMediaRepository.getWishlist()
-                SavedVisualMediaUiState.Success(wishlist)
+                wishlist = savedVisualMediaRepository.getWishlist()
+                val genres = genresRepository.getStoredGenres()
+                SavedVisualMediaUiState.Success(wishlist, genres)
             } catch (e: Exception) {
                 SavedVisualMediaUiState.Error
             }
@@ -53,15 +60,24 @@ class WishlistViewModel(
 
     fun searchInWishlist(query: String) {
         viewModelScope.launch {
+            val uiState = wishlistUiState as SavedVisualMediaUiState.Success
             wishlistUiState = SavedVisualMediaUiState.Loading
             wishlistUiState = try {
-                val wishlist =
-                    savedVisualMediaRepository.searchInWishlist(query)
-                SavedVisualMediaUiState.Success(wishlist)
+                wishlist = savedVisualMediaRepository.searchInWishlist(query)
+                uiState.copy(visualMediaList = wishlist)
             } catch (e: Exception) {
                 SavedVisualMediaUiState.Error
             }
         }
+    }
+
+    fun selectedGenresChanged(genres: Set<Genre>) {
+        val uiState = wishlistUiState as SavedVisualMediaUiState.Success
+        wishlistUiState = uiState.copy(
+            visualMediaList = wishlist.map {
+                it.filter { visualMedia -> visualMedia.hasAnyGenreOf(genres) }
+            }
+        )
     }
 
     companion object {
@@ -70,7 +86,8 @@ class WishlistViewModel(
                 val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as WatchedThatApplication
                 val savedVisualMediaRepository =
                     application.container.savedVisualMediaRepository
-                WishlistViewModel(savedVisualMediaRepository)
+                val genresRepository = application.container.genresRepository
+                WishlistViewModel(savedVisualMediaRepository, genresRepository)
             }
         }
     }

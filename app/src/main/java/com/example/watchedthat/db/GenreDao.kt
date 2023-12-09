@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.watchedthat.model.genre.Genre
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GenreDao {
@@ -12,5 +13,5 @@ interface GenreDao {
     suspend fun insertAll(genres: List<Genre>)
 
     @Query("SELECT * FROM genres ORDER BY name ASC")
-    suspend fun getAll(): List<Genre>
+    fun getAll(): Flow<List<Genre>>
 }

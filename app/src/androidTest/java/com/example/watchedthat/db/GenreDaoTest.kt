@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.watchedthat.fake.FakeDataSource
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -34,7 +35,7 @@ class GenreDaoTest {
     fun insertAll_insertsAllGivenGenres() = runTest {
         val genres = FakeDataSource.genres
         dao.insertAll(genres)
-        val storedGenres = dao.getAll()
+        val storedGenres = dao.getAll().first()
         assert(storedGenres.containsAll(genres) && storedGenres.size == genres.size)
     }
 
@@ -42,6 +43,6 @@ class GenreDaoTest {
     fun getAll_returnsAllGenresOrderedByName() = runTest {
         val genres = FakeDataSource.genres
         dao.insertAll(genres)
-        assert(dao.getAll() == genres.sortedBy { it.name })
+        assert(dao.getAll().first() == genres.sortedBy { it.name })
     }
 }
