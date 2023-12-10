@@ -118,20 +118,40 @@ class HomeViewModel(
         selectedGenres = genres
         viewModelScope.launch {
             val uiState = visualMediaUiState as VisualMediaUiState.Success
+            if (selectedGenres.isEmpty()) {
+                visualMediaUiState = uiState.copy(visualMediaList = emptyList())
+                return@launch
+            }
             visualMediaUiState = try {
                 when (uiState.resultType) {
                     ResultType.Trending -> {
-                        uiState.copy(
-                            visualMediaList = visualMediaRepository
-                                .getTrending()
+                        var results = visualMediaRepository
+                            .getTrending()
+                            .filter { it.hasAnyGenreOf(genres) }
+                        repeat(10) {
+                            if (results.isNotEmpty()) {
+                                return@repeat
+                            }
+                            results = visualMediaRepository.getMoreTrending()
                                 .filter { it.hasAnyGenreOf(genres) }
+                        }
+                        uiState.copy(
+                            visualMediaList = results
                         )
                     }
                     ResultType.Search -> {
+                        var results = visualMediaRepository
+                            .search(uiState.query!!)
+                            .filter { it.hasAnyGenreOf(genres) }
+                        repeat(10) {
+                            if (results.isNotEmpty()) {
+                                return@repeat
+                            }
+                            results = visualMediaRepository.getMoreSearchResults()
+                                .filter { it.hasAnyGenreOf(genres) }
+                        }
                         uiState.copy(
-                            visualMediaList = visualMediaRepository
-                                .search(uiState.query!!)
-                                .filter { it.hasAnyGenreOf(genres) },
+                            visualMediaList = results
                         )
                     }
                 }

@@ -17,6 +17,7 @@ import com.example.watchedthat.model.visual_media.SavedVisualMedia
 import com.example.watchedthat.model.visual_media.VisualMedia
 import com.example.watchedthat.ui.screens.SavedVisualMediaUiState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -76,6 +77,10 @@ class WatchedListViewModel(
 
     fun selectedGenresChanged(genres: Set<Genre>) {
         val uiState = watchedListUiState as SavedVisualMediaUiState.Success
+        if (genres.isEmpty()) {
+            watchedListUiState = uiState.copy(visualMediaList = flowOf(emptyList()))
+            return
+        }
         watchedListUiState = uiState.copy(
             visualMediaList = watchedList.map {
                 it.filter { visualMedia -> visualMedia.hasAnyGenreOf(genres) }
