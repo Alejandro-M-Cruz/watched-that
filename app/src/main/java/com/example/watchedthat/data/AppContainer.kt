@@ -62,7 +62,11 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         retrofit.create(GenresApiService::class.java),
         AppDatabase.getInstance(context).genreDao()
     ).also {genresRepository -> appContainerScope.launch {
-        genresRepository.storeGenres(genresRepository.getAllGenres())
+        try {
+            genresRepository.storeGenres(genresRepository.getAllGenres())
+        } catch (e: Exception) {
+            // No connection
+        }
     }}
 
     override val savedVisualMediaRepository: SavedVisualMediaRepository by lazy {
