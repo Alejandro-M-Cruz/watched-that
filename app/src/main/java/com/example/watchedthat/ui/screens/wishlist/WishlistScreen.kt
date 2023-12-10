@@ -38,7 +38,8 @@ fun WishlistScreen(
                 if (genres.isNotEmpty()) {
                     GenreFilters(
                         genres = genres,
-                        onSelectedGenres = wishlistViewModel::selectedGenresChanged
+                        onSelectedGenres = wishlistViewModel::selectedGenresChanged,
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }
                 VisualMediaGrid(

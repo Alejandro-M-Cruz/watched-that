@@ -1,6 +1,8 @@
 package com.example.watchedthat.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -35,53 +37,53 @@ fun GenreFilters(
 ) {
     var selectedGenres by remember { mutableStateOf(genres.toSet()) }
     val genreFilters = genres.sortedByDescending { selectedGenres.contains(it) }
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        item {
-            if (selectedGenres.containsAll(genres)) {
-                IconButton(
-                    onClick = {
-                        selectedGenres = emptySet()
-                        onSelectedGenres(selectedGenres)
-                    },
-                    modifier = Modifier.size(FilterChipDefaults.Height)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Clear,
-                        contentDescription = "Clear all filters"
-                    )
-                }
-            } else {
-                FilledTonalIconButton(
-                    onClick = {
-                        selectedGenres = genres.toSet()
-                        onSelectedGenres(selectedGenres)
-                    },
-                    modifier = Modifier.size(FilterChipDefaults.Height)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = "Select all filters"
-                    )
-                }
+
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        if (selectedGenres.containsAll(genres)) {
+            IconButton(
+                onClick = {
+                    selectedGenres = emptySet()
+                    onSelectedGenres(selectedGenres)
+                },
+                modifier = Modifier.padding(end = 4.dp).size(FilterChipDefaults.Height)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Clear,
+                    contentDescription = "Clear all filters"
+                )
+            }
+        } else {
+            FilledTonalIconButton(
+                onClick = {
+                    selectedGenres = genres.toSet()
+                    onSelectedGenres(selectedGenres)
+                },
+                modifier = Modifier.padding(end = 4.dp).size(FilterChipDefaults.Height)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = "Select all filters"
+                )
             }
         }
-        items(genreFilters, key = { it.id }) {
-            GenreFilterChip(
-                label = it.name,
-                selected = selectedGenres.contains(it),
-                onClick = {
-                    selectedGenres = if (selectedGenres.contains(it)) {
-                        selectedGenres - it
-                    } else {
-                        selectedGenres + it
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(genreFilters, key = { it.id }) {
+                GenreFilterChip(
+                    label = it.name,
+                    selected = selectedGenres.contains(it),
+                    onClick = {
+                        selectedGenres = if (selectedGenres.contains(it)) {
+                            selectedGenres - it
+                        } else {
+                            selectedGenres + it
+                        }
+                        onSelectedGenres(selectedGenres)
                     }
-                    onSelectedGenres(selectedGenres)
-                }
-            )
+                )
+            }
         }
     }
 }

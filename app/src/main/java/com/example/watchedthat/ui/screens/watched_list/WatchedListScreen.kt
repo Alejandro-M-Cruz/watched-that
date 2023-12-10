@@ -38,7 +38,8 @@ fun WatchedListScreen(
                 if (genres.isNotEmpty()) {
                     GenreFilters(
                         genres = genres,
-                        onSelectedGenres = watchedListViewModel::selectedGenresChanged
+                        onSelectedGenres = watchedListViewModel::selectedGenresChanged,
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }
                 VisualMediaGrid (
